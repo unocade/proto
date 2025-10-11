@@ -4,7 +4,7 @@
 // 	protoc        v6.32.1
 // source: user.proto
 
-package userpb
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -197,7 +197,7 @@ const file_user_proto_rawDesc = "" +
 	"\vUserService\x129\n" +
 	"\n" +
 	"CreateUser\x12\x17.user.CreateUserRequest\x1a\x12.user.UserResponse\x123\n" +
-	"\aGetUser\x12\x14.user.GetUserRequest\x1a\x12.user.UserResponseB\x12Z\x10proto/pb/;userpbb\x06proto3"
+	"\aGetUser\x12\x14.user.GetUserRequest\x1a\x12.user.UserResponseB\aZ\x05./;pbb\x06proto3"
 
 var (
 	file_user_proto_rawDescOnce sync.Once
