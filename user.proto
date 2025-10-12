@@ -6,6 +6,23 @@ option go_package = "./;pb";
 service UserService {
   rpc CreateUser(CreateUserRequest) returns (UserResponse);
   rpc GetUser(GetUserRequest) returns (UserResponse);
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+  rpc RegisterService(RegisterServiceRequest) returns (RegisterServiceResponse);
+}
+
+message RegisterServiceRequest {
+  string service_name = 1;
+  string service_port = 2;
+}
+
+message RegisterServiceResponse {
+  string message = 1;
+}
+
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+  string status = 1; // "ok" or "fail"
 }
 
 message CreateUserRequest {
