@@ -38,4 +38,6 @@ message UserResponse {
   string id = 1;
   string username = 2;
   string avatar_url = 3;
+  string access_token = 4;
+  string refresh_token = 5;
 }
