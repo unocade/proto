@@ -6,6 +6,11 @@ option go_package = "./;pb";
 service TokenService {
   rpc GenerateToken(GenerateTokenRequest) returns (GenerateTokenResponse);
   rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (GenerateTokenResponse);
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
 }
 
 message GenerateTokenRequest {

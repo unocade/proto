@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	TokenService_GenerateToken_FullMethodName = "/token.TokenService/GenerateToken"
 	TokenService_ValidateToken_FullMethodName = "/token.TokenService/ValidateToken"
+	TokenService_RefreshToken_FullMethodName  = "/token.TokenService/RefreshToken"
 )
 
 // TokenServiceClient is the client API for TokenService service.
@@ -29,6 +30,7 @@ const (
 type TokenServiceClient interface {
 	GenerateToken(ctx context.Context, in *GenerateTokenRequest, opts ...grpc.CallOption) (*GenerateTokenResponse, error)
 	ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*ValidateTokenResponse, error)
+	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*GenerateTokenResponse, error)
 }
 
 type tokenServiceClient struct {
@@ -59,12 +61,23 @@ func (c *tokenServiceClient) ValidateToken(ctx context.Context, in *ValidateToke
 	return out, nil
 }
 
+func (c *tokenServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*GenerateTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenerateTokenResponse)
+	err := c.cc.Invoke(ctx, TokenService_RefreshToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TokenServiceServer is the server API for TokenService service.
 // All implementations must embed UnimplementedTokenServiceServer
 // for forward compatibility.
 type TokenServiceServer interface {
 	GenerateToken(context.Context, *GenerateTokenRequest) (*GenerateTokenResponse, error)
 	ValidateToken(context.Context, *ValidateTokenRequest) (*ValidateTokenResponse, error)
+	RefreshToken(context.Context, *RefreshTokenRequest) (*GenerateTokenResponse, error)
 	mustEmbedUnimplementedTokenServiceServer()
 }
 
@@ -80,6 +93,9 @@ func (UnimplementedTokenServiceServer) GenerateToken(context.Context, *GenerateT
 }
 func (UnimplementedTokenServiceServer) ValidateToken(context.Context, *ValidateTokenRequest) (*ValidateTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateToken not implemented")
+}
+func (UnimplementedTokenServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*GenerateTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
 }
 func (UnimplementedTokenServiceServer) mustEmbedUnimplementedTokenServiceServer() {}
 func (UnimplementedTokenServiceServer) testEmbeddedByValue()                      {}
@@ -138,6 +154,24 @@ func _TokenService_ValidateToken_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TokenService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TokenServiceServer).RefreshToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TokenService_RefreshToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TokenServiceServer).RefreshToken(ctx, req.(*RefreshTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TokenService_ServiceDesc is the grpc.ServiceDesc for TokenService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +186,10 @@ var TokenService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ValidateToken",
 			Handler:    _TokenService_ValidateToken_Handler,
+		},
+		{
+			MethodName: "RefreshToken",
+			Handler:    _TokenService_RefreshToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
