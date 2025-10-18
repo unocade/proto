@@ -68,7 +68,7 @@ func (x *RefreshTokenRequest) GetRefreshToken() string {
 type GenerateTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	GamerTag      string                 `protobuf:"bytes,2,opt,name=gamer_tag,json=gamerTag,proto3" json:"gamer_tag,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -110,9 +110,9 @@ func (x *GenerateTokenRequest) GetUserId() string {
 	return ""
 }
 
-func (x *GenerateTokenRequest) GetUsername() string {
+func (x *GenerateTokenRequest) GetGamerTag() string {
 	if x != nil {
-		return x.Username
+		return x.GamerTag
 	}
 	return ""
 }
@@ -225,7 +225,7 @@ type ValidateTokenResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Valid         bool                   `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
 	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
+	GamerTag      string                 `protobuf:"bytes,3,opt,name=gamer_tag,json=gamerTag,proto3" json:"gamer_tag,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -274,9 +274,9 @@ func (x *ValidateTokenResponse) GetUserId() string {
 	return ""
 }
 
-func (x *ValidateTokenResponse) GetUsername() string {
+func (x *ValidateTokenResponse) GetGamerTag() string {
 	if x != nil {
-		return x.Username
+		return x.GamerTag
 	}
 	return ""
 }
@@ -287,21 +287,21 @@ const file_token_proto_rawDesc = "" +
 	"\n" +
 	"\vtoken.proto\x12\x05token\":\n" +
 	"\x13RefreshTokenRequest\x12#\n" +
-	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"K\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"L\n" +
 	"\x14GenerateTokenRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1a\n" +
-	"\busername\x18\x02 \x01(\tR\busername\"~\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
+	"\tgamer_tag\x18\x02 \x01(\tR\bgamerTag\"~\n" +
 	"\x15GenerateTokenResponse\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
 	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12\x1d\n" +
 	"\n" +
 	"expires_in\x18\x03 \x01(\x03R\texpiresIn\",\n" +
 	"\x14ValidateTokenRequest\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token\"b\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\"c\n" +
 	"\x15ValidateTokenResponse\x12\x14\n" +
 	"\x05valid\x18\x01 \x01(\bR\x05valid\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1a\n" +
-	"\busername\x18\x03 \x01(\tR\busername2\xf0\x01\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1b\n" +
+	"\tgamer_tag\x18\x03 \x01(\tR\bgamerTag2\xf0\x01\n" +
 	"\fTokenService\x12J\n" +
 	"\rGenerateToken\x12\x1b.token.GenerateTokenRequest\x1a\x1c.token.GenerateTokenResponse\x12J\n" +
 	"\rValidateToken\x12\x1b.token.ValidateTokenRequest\x1a\x1c.token.ValidateTokenResponse\x12H\n" +

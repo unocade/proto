@@ -26,8 +26,10 @@ message HealthCheckResponse {
 }
 
 message CreateUserRequest {
-  string username = 1;
-  string avatar_url = 2;
+  string email = 1;
+  string password = 2;
+  string gamer_tag = 3;
+  string avatar_url =4;
 }
 
 message GetUserRequest {
@@ -36,7 +38,7 @@ message GetUserRequest {
 
 message UserResponse {
   string id = 1;
-  string username = 2;
+  string gamer_tag = 2;
   string avatar_url = 3;
   string access_token = 4;
   string refresh_token = 5;

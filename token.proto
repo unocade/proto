@@ -15,7 +15,7 @@ message RefreshTokenRequest {
 
 message GenerateTokenRequest {
   string user_id = 1;
-  string username = 2;
+  string gamer_tag = 2;
 }
 
 message GenerateTokenResponse {
@@ -31,5 +31,5 @@ message ValidateTokenRequest {
 message ValidateTokenResponse {
   bool valid = 1;
   string user_id = 2;
-  string username = 3;
+  string gamer_tag = 3;
 }
