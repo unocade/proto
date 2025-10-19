@@ -3,14 +3,14 @@ syntax = "proto3";
 package token;
 option go_package = "./;pb";
 
+import "common.proto";
+
 service TokenService {
   rpc GenerateToken(GenerateTokenRequest) returns (GenerateTokenResponse);
   rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
   rpc RefreshToken(RefreshTokenRequest) returns (GenerateTokenResponse);
-}
-
-message RefreshTokenRequest {
-  string refresh_token = 1;
+  rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
+  rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
 }
 
 message GenerateTokenRequest {
@@ -32,4 +32,8 @@ message ValidateTokenResponse {
   bool valid = 1;
   string user_id = 2;
   string gamer_tag = 3;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
 }
