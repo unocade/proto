@@ -25,9 +25,10 @@ message GetUserRequest {
 
 message UserResponse {
   string id = 1;
-  string gamer_tag = 2;
-  string avatar_url = 3;
-  string access_token = 4;
-  string refresh_token = 5;
+  string email = 2;
+  string gamer_tag = 3;
+  string avatar_url = 4;
+  string access_token = 5;
+  string refresh_token = 6;
 }
 
