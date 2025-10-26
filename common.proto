@@ -9,6 +9,8 @@ message RegisterServiceRequest {
   string service_port = 2;
 }
 
+message Empty {}
+
 message RegisterServiceResponse {
   string message = 1;
 }
