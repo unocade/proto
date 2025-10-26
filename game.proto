@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package game;
+option go_package = "./;pb";
+
+import "common.proto";
+
+service GameService {
+  // Game lifecycle
+  rpc CreateGame(CreateGameRequest) returns (GameResponse);
+  rpc JoinGame(JoinGameRequest) returns (GameResponse);
+  rpc StartGame(StartGameRequest) returns (GameResponse);
+  rpc EndGame(EndGameRequest) returns (GameResponse);
+  rpc GetGameState(GetGameStateRequest) returns (GameStateResponse);
+
+  // Health & registration
+  rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
+  rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
+}
+
+message CreateGameRequest {
+  string host_user_id = 1; // From UMS
+  string game_mode = 2;
+  int32 max_players = 3;
+}
+
+message JoinGameRequest {
+  string game_id = 1;
+  string user_id = 2; // Validated via TMS
+}
+
+message StartGameRequest {
+  string game_id = 1;
+}
+
+message EndGameRequest {
+  string game_id = 1;
+  string winner_user_id = 2;
+}
+
+message GetGameStateRequest {
+  string game_id = 1;
+}
+
+message GameResponse {
+  string game_id = 1;
+  string message = 2;
+  string status = 3; // pending, active, finished
+}
+
+message GameStateResponse {
+  string game_id = 1;
+  repeated Player players = 2;
+  string status = 3;
+}
+
+message Player {
+  string id = 1;
+  string gamer_tag = 2;
+  string avatar_url = 3;
+  bool is_ready = 4;
+}
