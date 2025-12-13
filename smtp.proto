@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package user;
+option go_package = "./;pb";
+
+service SMTPService {
+  rpc SendEmail(SendEmailRequest) returns (SendEmailResponse);
+}
+
+message SendEmailRequest {
+  string email = 1;
+  string gamer_tag = 2;
+  string avatar_url = 3;
+  string topic = 4;
+}
+
+message SendEmailResponse {
+  bool success = 1;
+  string err=2;
+}
