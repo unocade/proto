@@ -1,6 +1,6 @@
 module github.com/unocade/proto
 
-go 1.24.3
+go 1.24.10
 
 require (
 	google.golang.org/grpc v1.76.0
