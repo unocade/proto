@@ -1,10 +1,16 @@
 syntax = "proto3";
 
-package user;
+package smtp;
 option go_package = "./;pb";
+
+import "common.proto";
+
 
 service SMTPService {
   rpc SendEmail(SendEmailRequest) returns (SendEmailResponse);
+
+  rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
+  rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
 }
 
 message SendEmailRequest {

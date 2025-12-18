@@ -9,6 +9,7 @@ service TokenService {
   rpc GenerateToken(GenerateTokenRequest) returns (GenerateTokenResponse);
   rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
   rpc RefreshToken(RefreshTokenRequest) returns (GenerateTokenResponse);
+  
   rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
   rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
 }
