@@ -9,13 +9,9 @@ service CacheService {
   rpc Set(CacheSetRequest) returns (CacheResponse);
   rpc Get(CacheGetRequest) returns (CacheResponse);
   rpc Delete(CacheDeleteRequest) returns (CacheResponse);
+  
   rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
-}
-
-service RegistryService {
   rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
-  rpc GetService(GetServiceRequest) returns (GetServiceResponse);
-  rpc ListServices(ListServicesRequest) returns (ListServicesResponse);
 }
 
 message CacheSetRequest {
@@ -35,22 +31,4 @@ message CacheDeleteRequest {
 message CacheResponse {
   string message = 1;
   string value = 2;
-}
-
-// -------- Registry --------
-
-message GetServiceRequest {
-  string service_name = 1;
-}
-
-message GetServiceResponse {
-  string service_name = 1;
-  string service_port = 2;
-  string status = 3; // "online" or "expired"
-}
-
-message ListServicesRequest {}
-
-message ListServicesResponse {
-  repeated GetServiceResponse services = 1;
 }

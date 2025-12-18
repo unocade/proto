@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SMTPService_SendEmail_FullMethodName = "/user.SMTPService/SendEmail"
+	SMTPService_SendEmail_FullMethodName       = "/smtp.SMTPService/SendEmail"
+	SMTPService_HealthCheck_FullMethodName     = "/smtp.SMTPService/HealthCheck"
+	SMTPService_RegisterService_FullMethodName = "/smtp.SMTPService/RegisterService"
 )
 
 // SMTPServiceClient is the client API for SMTPService service.
@@ -27,6 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SMTPServiceClient interface {
 	SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*SendEmailResponse, error)
+	HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
+	RegisterService(ctx context.Context, in *RegisterServiceRequest, opts ...grpc.CallOption) (*RegisterServiceResponse, error)
 }
 
 type sMTPServiceClient struct {
@@ -47,11 +51,33 @@ func (c *sMTPServiceClient) SendEmail(ctx context.Context, in *SendEmailRequest,
 	return out, nil
 }
 
+func (c *sMTPServiceClient) HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HealthCheckResponse)
+	err := c.cc.Invoke(ctx, SMTPService_HealthCheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sMTPServiceClient) RegisterService(ctx context.Context, in *RegisterServiceRequest, opts ...grpc.CallOption) (*RegisterServiceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegisterServiceResponse)
+	err := c.cc.Invoke(ctx, SMTPService_RegisterService_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SMTPServiceServer is the server API for SMTPService service.
 // All implementations must embed UnimplementedSMTPServiceServer
 // for forward compatibility.
 type SMTPServiceServer interface {
 	SendEmail(context.Context, *SendEmailRequest) (*SendEmailResponse, error)
+	HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
+	RegisterService(context.Context, *RegisterServiceRequest) (*RegisterServiceResponse, error)
 	mustEmbedUnimplementedSMTPServiceServer()
 }
 
@@ -64,6 +90,12 @@ type UnimplementedSMTPServiceServer struct{}
 
 func (UnimplementedSMTPServiceServer) SendEmail(context.Context, *SendEmailRequest) (*SendEmailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendEmail not implemented")
+}
+func (UnimplementedSMTPServiceServer) HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
+func (UnimplementedSMTPServiceServer) RegisterService(context.Context, *RegisterServiceRequest) (*RegisterServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterService not implemented")
 }
 func (UnimplementedSMTPServiceServer) mustEmbedUnimplementedSMTPServiceServer() {}
 func (UnimplementedSMTPServiceServer) testEmbeddedByValue()                     {}
@@ -104,16 +136,60 @@ func _SMTPService_SendEmail_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SMTPService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SMTPServiceServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SMTPService_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SMTPServiceServer).HealthCheck(ctx, req.(*HealthCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SMTPService_RegisterService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SMTPServiceServer).RegisterService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SMTPService_RegisterService_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SMTPServiceServer).RegisterService(ctx, req.(*RegisterServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SMTPService_ServiceDesc is the grpc.ServiceDesc for SMTPService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SMTPService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.SMTPService",
+	ServiceName: "smtp.SMTPService",
 	HandlerType: (*SMTPServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "SendEmail",
 			Handler:    _SMTPService_SendEmail_Handler,
+		},
+		{
+			MethodName: "HealthCheck",
+			Handler:    _SMTPService_HealthCheck_Handler,
+		},
+		{
+			MethodName: "RegisterService",
+			Handler:    _SMTPService_RegisterService_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

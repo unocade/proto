@@ -146,7 +146,7 @@ var File_smtp_proto protoreflect.FileDescriptor
 const file_smtp_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"smtp.proto\x12\x04user\"z\n" +
+	"smtp.proto\x12\x04smtp\x1a\fcommon.proto\"z\n" +
 	"\x10SendEmailRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1b\n" +
 	"\tgamer_tag\x18\x02 \x01(\tR\bgamerTag\x12\x1d\n" +
@@ -155,9 +155,11 @@ const file_smtp_proto_rawDesc = "" +
 	"\x05topic\x18\x04 \x01(\tR\x05topic\"?\n" +
 	"\x11SendEmailResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x10\n" +
-	"\x03err\x18\x02 \x01(\tR\x03err2K\n" +
+	"\x03err\x18\x02 \x01(\tR\x03err2\xe7\x01\n" +
 	"\vSMTPService\x12<\n" +
-	"\tSendEmail\x12\x16.user.SendEmailRequest\x1a\x17.user.SendEmailResponseB\aZ\x05./;pbb\x06proto3"
+	"\tSendEmail\x12\x16.smtp.SendEmailRequest\x1a\x17.smtp.SendEmailResponse\x12F\n" +
+	"\vHealthCheck\x12\x1a.common.HealthCheckRequest\x1a\x1b.common.HealthCheckResponse\x12R\n" +
+	"\x0fRegisterService\x12\x1e.common.RegisterServiceRequest\x1a\x1f.common.RegisterServiceResponseB\aZ\x05./;pbb\x06proto3"
 
 var (
 	file_smtp_proto_rawDescOnce sync.Once
@@ -173,14 +175,22 @@ func file_smtp_proto_rawDescGZIP() []byte {
 
 var file_smtp_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_smtp_proto_goTypes = []any{
-	(*SendEmailRequest)(nil),  // 0: user.SendEmailRequest
-	(*SendEmailResponse)(nil), // 1: user.SendEmailResponse
+	(*SendEmailRequest)(nil),        // 0: smtp.SendEmailRequest
+	(*SendEmailResponse)(nil),       // 1: smtp.SendEmailResponse
+	(*HealthCheckRequest)(nil),      // 2: common.HealthCheckRequest
+	(*RegisterServiceRequest)(nil),  // 3: common.RegisterServiceRequest
+	(*HealthCheckResponse)(nil),     // 4: common.HealthCheckResponse
+	(*RegisterServiceResponse)(nil), // 5: common.RegisterServiceResponse
 }
 var file_smtp_proto_depIdxs = []int32{
-	0, // 0: user.SMTPService.SendEmail:input_type -> user.SendEmailRequest
-	1, // 1: user.SMTPService.SendEmail:output_type -> user.SendEmailResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 0: smtp.SMTPService.SendEmail:input_type -> smtp.SendEmailRequest
+	2, // 1: smtp.SMTPService.HealthCheck:input_type -> common.HealthCheckRequest
+	3, // 2: smtp.SMTPService.RegisterService:input_type -> common.RegisterServiceRequest
+	1, // 3: smtp.SMTPService.SendEmail:output_type -> smtp.SendEmailResponse
+	4, // 4: smtp.SMTPService.HealthCheck:output_type -> common.HealthCheckResponse
+	5, // 5: smtp.SMTPService.RegisterService:output_type -> common.RegisterServiceResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -191,6 +201,7 @@ func file_smtp_proto_init() {
 	if File_smtp_proto != nil {
 		return
 	}
+	file_common_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

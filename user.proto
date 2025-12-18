@@ -8,6 +8,7 @@ import "common.proto";
 service UserService {
   rpc CreateUser(CreateUserRequest) returns (UserResponse);
   rpc GetUser(GetUserRequest) returns (UserResponse);
+  
   rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
   rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
 }
