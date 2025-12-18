@@ -1,133 +1,34 @@
 syntax = "proto3";
 
 package cache;
-
-option go_package = "github.com/unocade/platform/cms/pb;pb";
+option go_package = "./;pb";
 
 import "common.proto";
 
-/*
-  Cache Management Service (CMS)
-
-  - Generic cache primitives
-  - Redis-backed
-  - No business logic
-  - Internal-only service
-*/
-
 service CacheService {
-
-  // ---------------- KV ----------------
-  rpc Set(SetRequest) returns (CacheResponse);
-  rpc Get(GetRequest) returns (GetResponse);
-  rpc Delete(DeleteRequest) returns (CacheResponse);
-  rpc Exists(ExistsRequest) returns (ExistsResponse);
-
-  // ---------------- Hash ----------------
-  rpc HSet(HSetRequest) returns (CacheResponse);
-  rpc HGet(HGetRequest) returns (GetResponse);
-  rpc HGetAll(HGetAllRequest) returns (HGetAllResponse);
-  rpc HDelete(HDeleteRequest) returns (CacheResponse);
-
-  // ---------------- Counters ----------------
-  rpc Increment(IncrementRequest) returns (IncrementResponse);
-
-  // ---------------- Pub/Sub (Internal) ----------------
-  rpc Publish(PublishRequest) returns (CacheResponse);
-
-  // ---------------- Health ----------------
-  rpc HealthCheck(common.HealthCheckRequest)
-      returns (common.HealthCheckResponse);
-
-  rpc RegisterService(common.RegisterServiceRequest)
-      returns (common.RegisterServiceResponse);
+  rpc Set(CacheSetRequest) returns (CacheResponse);
+  rpc Get(CacheGetRequest) returns (CacheResponse);
+  rpc Delete(CacheDeleteRequest) returns (CacheResponse);
+  
+  rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
+  rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
 }
 
-// ==================== Requests ====================
-
-message SetRequest {
-  string namespace = 1;       // gms, mms, nrs, lss
-  string key = 2;
-  bytes value = 3;
-  int64 ttl_seconds = 4;      // 0 = no TTL
+message CacheSetRequest {
+  string key = 1;
+  string value = 2;
+  int64 ttl_seconds = 3;
 }
 
-message GetRequest {
-  string namespace = 1;
-  string key = 2;
+message CacheGetRequest {
+  string key = 1;
 }
 
-message DeleteRequest {
-  string namespace = 1;
-  string key = 2;
+message CacheDeleteRequest {
+  string key = 1;
 }
-
-message ExistsRequest {
-  string namespace = 1;
-  string key = 2;
-}
-
-// ---------------- Hash ----------------
-
-message HSetRequest {
-  string namespace = 1;
-  string key = 2;
-  map<string, bytes> fields = 3;
-  int64 ttl_seconds = 4;
-}
-
-message HGetRequest {
-  string namespace = 1;
-  string key = 2;
-  string field = 3;
-}
-
-message HGetAllRequest {
-  string namespace = 1;
-  string key = 2;
-}
-
-message HDeleteRequest {
-  string namespace = 1;
-  string key = 2;
-  repeated string fields = 3;
-}
-
-// ---------------- Counters ----------------
-
-message IncrementRequest {
-  string namespace = 1;
-  string key = 2;
-  int64 delta = 3;
-}
-
-// ---------------- Pub/Sub ----------------
-
-message PublishRequest {
-  string topic = 1;
-  bytes payload = 2;
-}
-
-// ==================== Responses ====================
 
 message CacheResponse {
-  bool success = 1;
-  string message = 2;
-}
-
-message GetResponse {
-  bool found = 1;
-  bytes value = 2;
-}
-
-message ExistsResponse {
-  bool exists = 1;
-}
-
-message HGetAllResponse {
-  map<string, bytes> fields = 1;
-}
-
-message IncrementResponse {
-  int64 value = 1;
+  string message = 1;
+  string value = 2;
 }
