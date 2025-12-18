@@ -1,8 +1,7 @@
 syntax = "proto3";
 
 package cache;
-
-option go_package = "github.com/unocade/platform/cms/pb;pb";
+option go_package = "./;pb";
 
 import "common.proto";
 

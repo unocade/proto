@@ -22,6 +22,13 @@ const (
 	CacheService_Set_FullMethodName             = "/cache.CacheService/Set"
 	CacheService_Get_FullMethodName             = "/cache.CacheService/Get"
 	CacheService_Delete_FullMethodName          = "/cache.CacheService/Delete"
+	CacheService_Exists_FullMethodName          = "/cache.CacheService/Exists"
+	CacheService_HSet_FullMethodName            = "/cache.CacheService/HSet"
+	CacheService_HGet_FullMethodName            = "/cache.CacheService/HGet"
+	CacheService_HGetAll_FullMethodName         = "/cache.CacheService/HGetAll"
+	CacheService_HDelete_FullMethodName         = "/cache.CacheService/HDelete"
+	CacheService_Increment_FullMethodName       = "/cache.CacheService/Increment"
+	CacheService_Publish_FullMethodName         = "/cache.CacheService/Publish"
 	CacheService_HealthCheck_FullMethodName     = "/cache.CacheService/HealthCheck"
 	CacheService_RegisterService_FullMethodName = "/cache.CacheService/RegisterService"
 )
@@ -30,9 +37,21 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CacheServiceClient interface {
-	Set(ctx context.Context, in *CacheSetRequest, opts ...grpc.CallOption) (*CacheResponse, error)
-	Get(ctx context.Context, in *CacheGetRequest, opts ...grpc.CallOption) (*CacheResponse, error)
-	Delete(ctx context.Context, in *CacheDeleteRequest, opts ...grpc.CallOption) (*CacheResponse, error)
+	// ---------------- KV ----------------
+	Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*CacheResponse, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*CacheResponse, error)
+	Exists(ctx context.Context, in *ExistsRequest, opts ...grpc.CallOption) (*ExistsResponse, error)
+	// ---------------- Hash ----------------
+	HSet(ctx context.Context, in *HSetRequest, opts ...grpc.CallOption) (*CacheResponse, error)
+	HGet(ctx context.Context, in *HGetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	HGetAll(ctx context.Context, in *HGetAllRequest, opts ...grpc.CallOption) (*HGetAllResponse, error)
+	HDelete(ctx context.Context, in *HDeleteRequest, opts ...grpc.CallOption) (*CacheResponse, error)
+	// ---------------- Counters ----------------
+	Increment(ctx context.Context, in *IncrementRequest, opts ...grpc.CallOption) (*IncrementResponse, error)
+	// ---------------- Pub/Sub (Internal) ----------------
+	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*CacheResponse, error)
+	// ---------------- Health ----------------
 	HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
 	RegisterService(ctx context.Context, in *RegisterServiceRequest, opts ...grpc.CallOption) (*RegisterServiceResponse, error)
 }
@@ -45,7 +64,7 @@ func NewCacheServiceClient(cc grpc.ClientConnInterface) CacheServiceClient {
 	return &cacheServiceClient{cc}
 }
 
-func (c *cacheServiceClient) Set(ctx context.Context, in *CacheSetRequest, opts ...grpc.CallOption) (*CacheResponse, error) {
+func (c *cacheServiceClient) Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*CacheResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CacheResponse)
 	err := c.cc.Invoke(ctx, CacheService_Set_FullMethodName, in, out, cOpts...)
@@ -55,9 +74,9 @@ func (c *cacheServiceClient) Set(ctx context.Context, in *CacheSetRequest, opts 
 	return out, nil
 }
 
-func (c *cacheServiceClient) Get(ctx context.Context, in *CacheGetRequest, opts ...grpc.CallOption) (*CacheResponse, error) {
+func (c *cacheServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CacheResponse)
+	out := new(GetResponse)
 	err := c.cc.Invoke(ctx, CacheService_Get_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -65,10 +84,80 @@ func (c *cacheServiceClient) Get(ctx context.Context, in *CacheGetRequest, opts 
 	return out, nil
 }
 
-func (c *cacheServiceClient) Delete(ctx context.Context, in *CacheDeleteRequest, opts ...grpc.CallOption) (*CacheResponse, error) {
+func (c *cacheServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*CacheResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CacheResponse)
 	err := c.cc.Invoke(ctx, CacheService_Delete_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) Exists(ctx context.Context, in *ExistsRequest, opts ...grpc.CallOption) (*ExistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ExistsResponse)
+	err := c.cc.Invoke(ctx, CacheService_Exists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HSet(ctx context.Context, in *HSetRequest, opts ...grpc.CallOption) (*CacheResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CacheResponse)
+	err := c.cc.Invoke(ctx, CacheService_HSet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HGet(ctx context.Context, in *HGetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetResponse)
+	err := c.cc.Invoke(ctx, CacheService_HGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HGetAll(ctx context.Context, in *HGetAllRequest, opts ...grpc.CallOption) (*HGetAllResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HGetAllResponse)
+	err := c.cc.Invoke(ctx, CacheService_HGetAll_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HDelete(ctx context.Context, in *HDeleteRequest, opts ...grpc.CallOption) (*CacheResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CacheResponse)
+	err := c.cc.Invoke(ctx, CacheService_HDelete_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) Increment(ctx context.Context, in *IncrementRequest, opts ...grpc.CallOption) (*IncrementResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IncrementResponse)
+	err := c.cc.Invoke(ctx, CacheService_Increment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*CacheResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CacheResponse)
+	err := c.cc.Invoke(ctx, CacheService_Publish_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,9 +188,21 @@ func (c *cacheServiceClient) RegisterService(ctx context.Context, in *RegisterSe
 // All implementations must embed UnimplementedCacheServiceServer
 // for forward compatibility.
 type CacheServiceServer interface {
-	Set(context.Context, *CacheSetRequest) (*CacheResponse, error)
-	Get(context.Context, *CacheGetRequest) (*CacheResponse, error)
-	Delete(context.Context, *CacheDeleteRequest) (*CacheResponse, error)
+	// ---------------- KV ----------------
+	Set(context.Context, *SetRequest) (*CacheResponse, error)
+	Get(context.Context, *GetRequest) (*GetResponse, error)
+	Delete(context.Context, *DeleteRequest) (*CacheResponse, error)
+	Exists(context.Context, *ExistsRequest) (*ExistsResponse, error)
+	// ---------------- Hash ----------------
+	HSet(context.Context, *HSetRequest) (*CacheResponse, error)
+	HGet(context.Context, *HGetRequest) (*GetResponse, error)
+	HGetAll(context.Context, *HGetAllRequest) (*HGetAllResponse, error)
+	HDelete(context.Context, *HDeleteRequest) (*CacheResponse, error)
+	// ---------------- Counters ----------------
+	Increment(context.Context, *IncrementRequest) (*IncrementResponse, error)
+	// ---------------- Pub/Sub (Internal) ----------------
+	Publish(context.Context, *PublishRequest) (*CacheResponse, error)
+	// ---------------- Health ----------------
 	HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
 	RegisterService(context.Context, *RegisterServiceRequest) (*RegisterServiceResponse, error)
 	mustEmbedUnimplementedCacheServiceServer()
@@ -114,14 +215,35 @@ type CacheServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCacheServiceServer struct{}
 
-func (UnimplementedCacheServiceServer) Set(context.Context, *CacheSetRequest) (*CacheResponse, error) {
+func (UnimplementedCacheServiceServer) Set(context.Context, *SetRequest) (*CacheResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Set not implemented")
 }
-func (UnimplementedCacheServiceServer) Get(context.Context, *CacheGetRequest) (*CacheResponse, error) {
+func (UnimplementedCacheServiceServer) Get(context.Context, *GetRequest) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedCacheServiceServer) Delete(context.Context, *CacheDeleteRequest) (*CacheResponse, error) {
+func (UnimplementedCacheServiceServer) Delete(context.Context, *DeleteRequest) (*CacheResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedCacheServiceServer) Exists(context.Context, *ExistsRequest) (*ExistsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Exists not implemented")
+}
+func (UnimplementedCacheServiceServer) HSet(context.Context, *HSetRequest) (*CacheResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HSet not implemented")
+}
+func (UnimplementedCacheServiceServer) HGet(context.Context, *HGetRequest) (*GetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HGet not implemented")
+}
+func (UnimplementedCacheServiceServer) HGetAll(context.Context, *HGetAllRequest) (*HGetAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HGetAll not implemented")
+}
+func (UnimplementedCacheServiceServer) HDelete(context.Context, *HDeleteRequest) (*CacheResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HDelete not implemented")
+}
+func (UnimplementedCacheServiceServer) Increment(context.Context, *IncrementRequest) (*IncrementResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Increment not implemented")
+}
+func (UnimplementedCacheServiceServer) Publish(context.Context, *PublishRequest) (*CacheResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Publish not implemented")
 }
 func (UnimplementedCacheServiceServer) HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
@@ -151,7 +273,7 @@ func RegisterCacheServiceServer(s grpc.ServiceRegistrar, srv CacheServiceServer)
 }
 
 func _CacheService_Set_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CacheSetRequest)
+	in := new(SetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -163,13 +285,13 @@ func _CacheService_Set_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: CacheService_Set_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).Set(ctx, req.(*CacheSetRequest))
+		return srv.(CacheServiceServer).Set(ctx, req.(*SetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CacheGetRequest)
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -181,13 +303,13 @@ func _CacheService_Get_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: CacheService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).Get(ctx, req.(*CacheGetRequest))
+		return srv.(CacheServiceServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CacheDeleteRequest)
+	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -199,7 +321,133 @@ func _CacheService_Delete_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: CacheService_Delete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).Delete(ctx, req.(*CacheDeleteRequest))
+		return srv.(CacheServiceServer).Delete(ctx, req.(*DeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_Exists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).Exists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_Exists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).Exists(ctx, req.(*ExistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HSet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HSetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HSet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HSet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HSet(ctx, req.(*HSetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HGet(ctx, req.(*HGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HGetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HGetAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HGetAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HGetAll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HGetAll(ctx, req.(*HGetAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HDelete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HDelete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HDelete(ctx, req.(*HDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_Increment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IncrementRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).Increment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_Increment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).Increment(ctx, req.(*IncrementRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_Publish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).Publish(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_Publish_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).Publish(ctx, req.(*PublishRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -258,6 +506,34 @@ var CacheService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _CacheService_Delete_Handler,
+		},
+		{
+			MethodName: "Exists",
+			Handler:    _CacheService_Exists_Handler,
+		},
+		{
+			MethodName: "HSet",
+			Handler:    _CacheService_HSet_Handler,
+		},
+		{
+			MethodName: "HGet",
+			Handler:    _CacheService_HGet_Handler,
+		},
+		{
+			MethodName: "HGetAll",
+			Handler:    _CacheService_HGetAll_Handler,
+		},
+		{
+			MethodName: "HDelete",
+			Handler:    _CacheService_HDelete_Handler,
+		},
+		{
+			MethodName: "Increment",
+			Handler:    _CacheService_Increment_Handler,
+		},
+		{
+			MethodName: "Publish",
+			Handler:    _CacheService_Publish_Handler,
 		},
 		{
 			MethodName: "HealthCheck",
