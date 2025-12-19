@@ -23,8 +23,8 @@ const (
 
 type GenerateTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	GamerTag      string                 `protobuf:"bytes,2,opt,name=gamer_tag,json=gamerTag,proto3" json:"gamer_tag,omitempty"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	GamerTag      string                 `protobuf:"bytes,2,opt,name=gamerTag,proto3" json:"gamerTag,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +59,9 @@ func (*GenerateTokenRequest) Descriptor() ([]byte, []int) {
 	return file_token_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GenerateTokenRequest) GetUserId() string {
+func (x *GenerateTokenRequest) GetUserID() string {
 	if x != nil {
-		return x.UserId
+		return x.UserID
 	}
 	return ""
 }
@@ -75,9 +75,9 @@ func (x *GenerateTokenRequest) GetGamerTag() string {
 
 type GenerateTokenResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken   string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
-	RefreshToken  string                 `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	ExpiresIn     int64                  `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`
+	AccessToken   string                 `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,2,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"`
+	ExpiresIn     int64                  `protobuf:"varint,3,opt,name=expiresIn,proto3" json:"expiresIn,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -180,8 +180,8 @@ func (x *ValidateTokenRequest) GetToken() string {
 type ValidateTokenResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Valid         bool                   `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	GamerTag      string                 `protobuf:"bytes,3,opt,name=gamer_tag,json=gamerTag,proto3" json:"gamer_tag,omitempty"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
+	GamerTag      string                 `protobuf:"bytes,3,opt,name=gamerTag,proto3" json:"gamerTag,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -223,9 +223,9 @@ func (x *ValidateTokenResponse) GetValid() bool {
 	return false
 }
 
-func (x *ValidateTokenResponse) GetUserId() string {
+func (x *ValidateTokenResponse) GetUserID() string {
 	if x != nil {
-		return x.UserId
+		return x.UserID
 	}
 	return ""
 }
@@ -239,7 +239,7 @@ func (x *ValidateTokenResponse) GetGamerTag() string {
 
 type RefreshTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -285,23 +285,22 @@ var File_token_proto protoreflect.FileDescriptor
 
 const file_token_proto_rawDesc = "" +
 	"\n" +
-	"\vtoken.proto\x12\x05token\x1a\fcommon.proto\"L\n" +
-	"\x14GenerateTokenRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tgamer_tag\x18\x02 \x01(\tR\bgamerTag\"~\n" +
-	"\x15GenerateTokenResponse\x12!\n" +
-	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
-	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12\x1d\n" +
-	"\n" +
-	"expires_in\x18\x03 \x01(\x03R\texpiresIn\",\n" +
+	"\vtoken.proto\x12\x05token\x1a\fcommon.proto\"J\n" +
+	"\x14GenerateTokenRequest\x12\x16\n" +
+	"\x06userID\x18\x01 \x01(\tR\x06userID\x12\x1a\n" +
+	"\bgamerTag\x18\x02 \x01(\tR\bgamerTag\"{\n" +
+	"\x15GenerateTokenResponse\x12 \n" +
+	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\"\n" +
+	"\frefreshToken\x18\x02 \x01(\tR\frefreshToken\x12\x1c\n" +
+	"\texpiresIn\x18\x03 \x01(\x03R\texpiresIn\",\n" +
 	"\x14ValidateTokenRequest\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token\"c\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\"a\n" +
 	"\x15ValidateTokenResponse\x12\x14\n" +
-	"\x05valid\x18\x01 \x01(\bR\x05valid\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tgamer_tag\x18\x03 \x01(\tR\bgamerTag\":\n" +
-	"\x13RefreshTokenRequest\x12#\n" +
-	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken2\x8c\x03\n" +
+	"\x05valid\x18\x01 \x01(\bR\x05valid\x12\x16\n" +
+	"\x06userID\x18\x02 \x01(\tR\x06userID\x12\x1a\n" +
+	"\bgamerTag\x18\x03 \x01(\tR\bgamerTag\"9\n" +
+	"\x13RefreshTokenRequest\x12\"\n" +
+	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken2\x8c\x03\n" +
 	"\fTokenService\x12J\n" +
 	"\rGenerateToken\x12\x1b.token.GenerateTokenRequest\x1a\x1c.token.GenerateTokenResponse\x12J\n" +
 	"\rValidateToken\x12\x1b.token.ValidateTokenRequest\x1a\x1c.token.ValidateTokenResponse\x12H\n" +

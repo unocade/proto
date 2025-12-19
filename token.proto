@@ -15,14 +15,14 @@ service TokenService {
 }
 
 message GenerateTokenRequest {
-  string user_id = 1;
-  string gamer_tag = 2;
+  string userID = 1;
+  string gamerTag = 2;
 }
 
 message GenerateTokenResponse {
-  string access_token = 1;
-  string refresh_token = 2;
-  int64 expires_in = 3;
+  string accessToken = 1;
+  string refreshToken = 2;
+  int64 expiresIn = 3;
 }
 
 message ValidateTokenRequest {
@@ -31,10 +31,10 @@ message ValidateTokenRequest {
 
 message ValidateTokenResponse {
   bool valid = 1;
-  string user_id = 2;
-  string gamer_tag = 3;
+  string userID = 2;
+  string gamerTag = 3;
 }
 
 message RefreshTokenRequest {
-  string refresh_token = 1;
+  string refreshToken = 1;
 }
