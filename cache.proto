@@ -34,6 +34,9 @@ service CacheService {
   // ---------------- Pub/Sub (Internal) ----------------
   rpc Publish(PublishRequest) returns (CacheResponse);
 
+  // -------------Queue-----------------------------
+  rpc EnqueueCommand(EnqueueCommandRequest) returns (EnqueueCommandResponse);
+
   // ---------------- Health ----------------
   rpc HealthCheck(common.HealthCheckRequest)
       returns (common.HealthCheckResponse);
@@ -48,7 +51,7 @@ message SetRequest {
   string namespace = 1;       // gms, mms, nrs, lss
   string key = 2;
   bytes value = 3;
-  int64 ttl_seconds = 4;      // 0 = no TTL
+  int64 ttlSeconds = 4;      // 0 = no TTL
 }
 
 message GetRequest {
@@ -72,7 +75,7 @@ message HSetRequest {
   string namespace = 1;
   string key = 2;
   map<string, bytes> fields = 3;
-  int64 ttl_seconds = 4;
+  int64 ttlSeconds = 4;
 }
 
 message HGetRequest {
@@ -107,6 +110,15 @@ message PublishRequest {
   bytes payload = 2;
 }
 
+// ---------------- Queue -------------------
+
+message EnqueueCommandRequest {
+  string namespace = 1;     // gms
+  string streamKey = 2;    // game:{gameId}
+  bytes command = 3;        // serialized GameCommand
+}
+
+
 // ==================== Responses ====================
 
 message CacheResponse {
@@ -129,4 +141,9 @@ message HGetAllResponse {
 
 message IncrementResponse {
   int64 value = 1;
+}
+
+message EnqueueCommandResponse {
+  bool accepted = 1;
+  string message = 2;
 }
