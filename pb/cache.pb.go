@@ -26,7 +26,7 @@ type SetRequest struct {
 	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"` // gms, mms, nrs, lss
 	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	Value         []byte                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
-	TtlSeconds    int64                  `protobuf:"varint,4,opt,name=ttlSeconds,proto3" json:"ttlSeconds,omitempty"` // 0 = no TTL
+	TtlSeconds    int64                  `protobuf:"varint,4,opt,name=ttl_seconds,json=ttlSeconds,proto3" json:"ttl_seconds,omitempty"` // 0 = no TTL
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -250,7 +250,7 @@ type HSetRequest struct {
 	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	Fields        map[string][]byte      `protobuf:"bytes,3,rep,name=fields,proto3" json:"fields,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	TtlSeconds    int64                  `protobuf:"varint,4,opt,name=ttlSeconds,proto3" json:"ttlSeconds,omitempty"`
+	TtlSeconds    int64                  `protobuf:"varint,4,opt,name=ttl_seconds,json=ttlSeconds,proto3" json:"ttl_seconds,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -599,9 +599,9 @@ func (x *PublishRequest) GetPayload() []byte {
 
 type EnqueueCommandRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"` // gms
-	StreamKey     string                 `protobuf:"bytes,2,opt,name=streamKey,proto3" json:"streamKey,omitempty"` // game:{gameId}
-	Command       []byte                 `protobuf:"bytes,3,opt,name=command,proto3" json:"command,omitempty"`     // serialized GameCommand
+	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`                  // gms
+	StreamKey     string                 `protobuf:"bytes,2,opt,name=stream_key,json=streamKey,proto3" json:"stream_key,omitempty"` // game:{gameId}
+	Command       []byte                 `protobuf:"bytes,3,opt,name=command,proto3" json:"command,omitempty"`                      // serialized GameCommand
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -949,14 +949,13 @@ var File_cache_proto protoreflect.FileDescriptor
 
 const file_cache_proto_rawDesc = "" +
 	"\n" +
-	"\vcache.proto\x12\x05cache\x1a\fcommon.proto\"r\n" +
+	"\vcache.proto\x12\x05cache\x1a\fcommon.proto\"s\n" +
 	"\n" +
 	"SetRequest\x12\x1c\n" +
 	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x03 \x01(\fR\x05value\x12\x1e\n" +
-	"\n" +
-	"ttlSeconds\x18\x04 \x01(\x03R\n" +
+	"\x05value\x18\x03 \x01(\fR\x05value\x12\x1f\n" +
+	"\vttl_seconds\x18\x04 \x01(\x03R\n" +
 	"ttlSeconds\"<\n" +
 	"\n" +
 	"GetRequest\x12\x1c\n" +
@@ -967,13 +966,12 @@ const file_cache_proto_rawDesc = "" +
 	"\x03key\x18\x02 \x01(\tR\x03key\"?\n" +
 	"\rExistsRequest\x12\x1c\n" +
 	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\tR\x03key\"\xd0\x01\n" +
+	"\x03key\x18\x02 \x01(\tR\x03key\"\xd1\x01\n" +
 	"\vHSetRequest\x12\x1c\n" +
 	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x126\n" +
-	"\x06fields\x18\x03 \x03(\v2\x1e.cache.HSetRequest.FieldsEntryR\x06fields\x12\x1e\n" +
-	"\n" +
-	"ttlSeconds\x18\x04 \x01(\x03R\n" +
+	"\x06fields\x18\x03 \x03(\v2\x1e.cache.HSetRequest.FieldsEntryR\x06fields\x12\x1f\n" +
+	"\vttl_seconds\x18\x04 \x01(\x03R\n" +
 	"ttlSeconds\x1a9\n" +
 	"\vFieldsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
@@ -995,10 +993,11 @@ const file_cache_proto_rawDesc = "" +
 	"\x05delta\x18\x03 \x01(\x03R\x05delta\"@\n" +
 	"\x0ePublishRequest\x12\x14\n" +
 	"\x05topic\x18\x01 \x01(\tR\x05topic\x12\x18\n" +
-	"\apayload\x18\x02 \x01(\fR\apayload\"m\n" +
+	"\apayload\x18\x02 \x01(\fR\apayload\"n\n" +
 	"\x15EnqueueCommandRequest\x12\x1c\n" +
-	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x1c\n" +
-	"\tstreamKey\x18\x02 \x01(\tR\tstreamKey\x12\x18\n" +
+	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x1d\n" +
+	"\n" +
+	"stream_key\x18\x02 \x01(\tR\tstreamKey\x12\x18\n" +
 	"\acommand\x18\x03 \x01(\fR\acommand\"C\n" +
 	"\rCacheResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
