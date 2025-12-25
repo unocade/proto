@@ -22,6 +22,8 @@ service CacheService {
   rpc Delete(DeleteRequest) returns (CacheResponse);
   rpc Exists(ExistsRequest) returns (ExistsResponse);
 
+  rpc GetAll(GetAllRequest) returns (GetAllResponse);
+
   // ---------------- Hash ----------------
   rpc HSet(HSetRequest) returns (CacheResponse);
   rpc HGet(HGetRequest) returns (GetResponse);
@@ -57,6 +59,10 @@ message SetRequest {
 message GetRequest {
   string namespace = 1;
   string key = 2;
+}
+
+message GetAllRequest {
+  string namespace = 1;
 }
 
 message DeleteRequest {
@@ -129,6 +135,11 @@ message CacheResponse {
 message GetResponse {
   bool found = 1;
   bytes value = 2;
+}
+
+message GetAllResponse {
+  bool found = 1;
+  repeated string value = 2;
 }
 
 message ExistsResponse {
