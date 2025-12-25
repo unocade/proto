@@ -23,6 +23,7 @@ const (
 	CacheService_Get_FullMethodName             = "/cache.CacheService/Get"
 	CacheService_Delete_FullMethodName          = "/cache.CacheService/Delete"
 	CacheService_Exists_FullMethodName          = "/cache.CacheService/Exists"
+	CacheService_GetAll_FullMethodName          = "/cache.CacheService/GetAll"
 	CacheService_HSet_FullMethodName            = "/cache.CacheService/HSet"
 	CacheService_HGet_FullMethodName            = "/cache.CacheService/HGet"
 	CacheService_HGetAll_FullMethodName         = "/cache.CacheService/HGetAll"
@@ -43,6 +44,7 @@ type CacheServiceClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*CacheResponse, error)
 	Exists(ctx context.Context, in *ExistsRequest, opts ...grpc.CallOption) (*ExistsResponse, error)
+	GetAll(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*GetAllResponse, error)
 	// ---------------- Hash ----------------
 	HSet(ctx context.Context, in *HSetRequest, opts ...grpc.CallOption) (*CacheResponse, error)
 	HGet(ctx context.Context, in *HGetRequest, opts ...grpc.CallOption) (*GetResponse, error)
@@ -101,6 +103,16 @@ func (c *cacheServiceClient) Exists(ctx context.Context, in *ExistsRequest, opts
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ExistsResponse)
 	err := c.cc.Invoke(ctx, CacheService_Exists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) GetAll(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*GetAllResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllResponse)
+	err := c.cc.Invoke(ctx, CacheService_GetAll_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -206,6 +218,7 @@ type CacheServiceServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	Delete(context.Context, *DeleteRequest) (*CacheResponse, error)
 	Exists(context.Context, *ExistsRequest) (*ExistsResponse, error)
+	GetAll(context.Context, *GetAllRequest) (*GetAllResponse, error)
 	// ---------------- Hash ----------------
 	HSet(context.Context, *HSetRequest) (*CacheResponse, error)
 	HGet(context.Context, *HGetRequest) (*GetResponse, error)
@@ -241,6 +254,9 @@ func (UnimplementedCacheServiceServer) Delete(context.Context, *DeleteRequest) (
 }
 func (UnimplementedCacheServiceServer) Exists(context.Context, *ExistsRequest) (*ExistsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Exists not implemented")
+}
+func (UnimplementedCacheServiceServer) GetAll(context.Context, *GetAllRequest) (*GetAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
 }
 func (UnimplementedCacheServiceServer) HSet(context.Context, *HSetRequest) (*CacheResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HSet not implemented")
@@ -358,6 +374,24 @@ func _CacheService_Exists_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CacheServiceServer).Exists(ctx, req.(*ExistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).GetAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_GetAll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).GetAll(ctx, req.(*GetAllRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -546,6 +580,10 @@ var CacheService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Exists",
 			Handler:    _CacheService_Exists_Handler,
+		},
+		{
+			MethodName: "GetAll",
+			Handler:    _CacheService_GetAll_Handler,
 		},
 		{
 			MethodName: "HSet",
