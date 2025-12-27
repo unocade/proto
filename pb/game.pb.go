@@ -23,9 +23,9 @@ const (
 
 type CreateGameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	HostUserId    string                 `protobuf:"bytes,1,opt,name=host_user_id,json=hostUserId,proto3" json:"host_user_id,omitempty"` // From UMS
-	GameMode      string                 `protobuf:"bytes,2,opt,name=game_mode,json=gameMode,proto3" json:"game_mode,omitempty"`
-	MaxPlayers    int32                  `protobuf:"varint,3,opt,name=max_players,json=maxPlayers,proto3" json:"max_players,omitempty"`
+	HostID        string                 `protobuf:"bytes,1,opt,name=hostID,proto3" json:"hostID,omitempty"` // From UMS
+	GameMode      string                 `protobuf:"bytes,2,opt,name=gameMode,proto3" json:"gameMode,omitempty"`
+	MaxPlayers    int32                  `protobuf:"varint,3,opt,name=maxPlayers,proto3" json:"maxPlayers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -60,9 +60,9 @@ func (*CreateGameRequest) Descriptor() ([]byte, []int) {
 	return file_game_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *CreateGameRequest) GetHostUserId() string {
+func (x *CreateGameRequest) GetHostID() string {
 	if x != nil {
-		return x.HostUserId
+		return x.HostID
 	}
 	return ""
 }
@@ -83,8 +83,8 @@ func (x *CreateGameRequest) GetMaxPlayers() int32 {
 
 type JoinGameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameId        string                 `protobuf:"bytes,1,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // Validated via TMS
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"` // Validated via TMS
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -119,23 +119,23 @@ func (*JoinGameRequest) Descriptor() ([]byte, []int) {
 	return file_game_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *JoinGameRequest) GetGameId() string {
+func (x *JoinGameRequest) GetID() string {
 	if x != nil {
-		return x.GameId
+		return x.ID
 	}
 	return ""
 }
 
-func (x *JoinGameRequest) GetUserId() string {
+func (x *JoinGameRequest) GetUserID() string {
 	if x != nil {
-		return x.UserId
+		return x.UserID
 	}
 	return ""
 }
 
 type StartGameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameId        string                 `protobuf:"bytes,1,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -170,17 +170,17 @@ func (*StartGameRequest) Descriptor() ([]byte, []int) {
 	return file_game_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *StartGameRequest) GetGameId() string {
+func (x *StartGameRequest) GetID() string {
 	if x != nil {
-		return x.GameId
+		return x.ID
 	}
 	return ""
 }
 
 type EndGameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameId        string                 `protobuf:"bytes,1,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
-	WinnerUserId  string                 `protobuf:"bytes,2,opt,name=winner_user_id,json=winnerUserId,proto3" json:"winner_user_id,omitempty"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	WinnerUserID  string                 `protobuf:"bytes,2,opt,name=winnerUserID,proto3" json:"winnerUserID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -215,23 +215,23 @@ func (*EndGameRequest) Descriptor() ([]byte, []int) {
 	return file_game_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *EndGameRequest) GetGameId() string {
+func (x *EndGameRequest) GetID() string {
 	if x != nil {
-		return x.GameId
+		return x.ID
 	}
 	return ""
 }
 
-func (x *EndGameRequest) GetWinnerUserId() string {
+func (x *EndGameRequest) GetWinnerUserID() string {
 	if x != nil {
-		return x.WinnerUserId
+		return x.WinnerUserID
 	}
 	return ""
 }
 
 type GetGameStateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameId        string                 `protobuf:"bytes,1,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -266,16 +266,16 @@ func (*GetGameStateRequest) Descriptor() ([]byte, []int) {
 	return file_game_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetGameStateRequest) GetGameId() string {
+func (x *GetGameStateRequest) GetID() string {
 	if x != nil {
-		return x.GameId
+		return x.ID
 	}
 	return ""
 }
 
 type GameResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameId        string                 `protobuf:"bytes,1,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"` // pending, active, finished
 	unknownFields protoimpl.UnknownFields
@@ -312,9 +312,9 @@ func (*GameResponse) Descriptor() ([]byte, []int) {
 	return file_game_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GameResponse) GetGameId() string {
+func (x *GameResponse) GetID() string {
 	if x != nil {
-		return x.GameId
+		return x.ID
 	}
 	return ""
 }
@@ -335,7 +335,7 @@ func (x *GameResponse) GetStatus() string {
 
 type GameStateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameId        string                 `protobuf:"bytes,1,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 	Players       []*Player              `protobuf:"bytes,2,rep,name=players,proto3" json:"players,omitempty"`
 	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -372,9 +372,9 @@ func (*GameStateResponse) Descriptor() ([]byte, []int) {
 	return file_game_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GameStateResponse) GetGameId() string {
+func (x *GameStateResponse) GetID() string {
 	if x != nil {
-		return x.GameId
+		return x.ID
 	}
 	return ""
 }
@@ -395,10 +395,10 @@ func (x *GameStateResponse) GetStatus() string {
 
 type Player struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	GamerTag      string                 `protobuf:"bytes,2,opt,name=gamer_tag,json=gamerTag,proto3" json:"gamer_tag,omitempty"`
-	AvatarUrl     string                 `protobuf:"bytes,3,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
-	IsReady       bool                   `protobuf:"varint,4,opt,name=is_ready,json=isReady,proto3" json:"is_ready,omitempty"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	GamerTag      string                 `protobuf:"bytes,2,opt,name=gamerTag,proto3" json:"gamerTag,omitempty"`
+	AvatarURL     string                 `protobuf:"bytes,3,opt,name=avatarURL,proto3" json:"avatarURL,omitempty"`
+	IsReady       bool                   `protobuf:"varint,4,opt,name=isReady,proto3" json:"isReady,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -433,9 +433,9 @@ func (*Player) Descriptor() ([]byte, []int) {
 	return file_game_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *Player) GetId() string {
+func (x *Player) GetID() string {
 	if x != nil {
-		return x.Id
+		return x.ID
 	}
 	return ""
 }
@@ -447,9 +447,9 @@ func (x *Player) GetGamerTag() string {
 	return ""
 }
 
-func (x *Player) GetAvatarUrl() string {
+func (x *Player) GetAvatarURL() string {
 	if x != nil {
-		return x.AvatarUrl
+		return x.AvatarURL
 	}
 	return ""
 }
@@ -466,37 +466,36 @@ var File_game_proto protoreflect.FileDescriptor
 const file_game_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"game.proto\x12\x04game\x1a\fcommon.proto\"s\n" +
-	"\x11CreateGameRequest\x12 \n" +
-	"\fhost_user_id\x18\x01 \x01(\tR\n" +
-	"hostUserId\x12\x1b\n" +
-	"\tgame_mode\x18\x02 \x01(\tR\bgameMode\x12\x1f\n" +
-	"\vmax_players\x18\x03 \x01(\x05R\n" +
-	"maxPlayers\"C\n" +
-	"\x0fJoinGameRequest\x12\x17\n" +
-	"\agame_id\x18\x01 \x01(\tR\x06gameId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\"+\n" +
-	"\x10StartGameRequest\x12\x17\n" +
-	"\agame_id\x18\x01 \x01(\tR\x06gameId\"O\n" +
-	"\x0eEndGameRequest\x12\x17\n" +
-	"\agame_id\x18\x01 \x01(\tR\x06gameId\x12$\n" +
-	"\x0ewinner_user_id\x18\x02 \x01(\tR\fwinnerUserId\".\n" +
-	"\x13GetGameStateRequest\x12\x17\n" +
-	"\agame_id\x18\x01 \x01(\tR\x06gameId\"Y\n" +
-	"\fGameResponse\x12\x17\n" +
-	"\agame_id\x18\x01 \x01(\tR\x06gameId\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\tR\x06status\"l\n" +
-	"\x11GameStateResponse\x12\x17\n" +
-	"\agame_id\x18\x01 \x01(\tR\x06gameId\x12&\n" +
-	"\aplayers\x18\x02 \x03(\v2\f.game.PlayerR\aplayers\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\tR\x06status\"o\n" +
-	"\x06Player\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
-	"\tgamer_tag\x18\x02 \x01(\tR\bgamerTag\x12\x1d\n" +
+	"game.proto\x12\x04game\x1a\fcommon.proto\"g\n" +
+	"\x11CreateGameRequest\x12\x16\n" +
+	"\x06hostID\x18\x01 \x01(\tR\x06hostID\x12\x1a\n" +
+	"\bgameMode\x18\x02 \x01(\tR\bgameMode\x12\x1e\n" +
 	"\n" +
-	"avatar_url\x18\x03 \x01(\tR\tavatarUrl\x12\x19\n" +
-	"\bis_ready\x18\x04 \x01(\bR\aisReady2\xcd\x03\n" +
+	"maxPlayers\x18\x03 \x01(\x05R\n" +
+	"maxPlayers\"9\n" +
+	"\x0fJoinGameRequest\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x16\n" +
+	"\x06userID\x18\x02 \x01(\tR\x06userID\"\"\n" +
+	"\x10StartGameRequest\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\"D\n" +
+	"\x0eEndGameRequest\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\"\n" +
+	"\fwinnerUserID\x18\x02 \x01(\tR\fwinnerUserID\"%\n" +
+	"\x13GetGameStateRequest\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\"P\n" +
+	"\fGameResponse\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\"c\n" +
+	"\x11GameStateResponse\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12&\n" +
+	"\aplayers\x18\x02 \x03(\v2\f.game.PlayerR\aplayers\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\"l\n" +
+	"\x06Player\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x1a\n" +
+	"\bgamerTag\x18\x02 \x01(\tR\bgamerTag\x12\x1c\n" +
+	"\tavatarURL\x18\x03 \x01(\tR\tavatarURL\x12\x18\n" +
+	"\aisReady\x18\x04 \x01(\bR\aisReady2\xcd\x03\n" +
 	"\vGameService\x129\n" +
 	"\n" +
 	"CreateGame\x12\x17.game.CreateGameRequest\x1a\x12.game.GameResponse\x125\n" +

@@ -19,44 +19,44 @@ service GameService {
 }
 
 message CreateGameRequest {
-  string host_user_id = 1; // From UMS
-  string game_mode = 2;
-  int32 max_players = 3;
+  string hostID = 1; // From UMS
+  string gameMode = 2;
+  int32 maxPlayers = 3;
 }
 
 message JoinGameRequest {
-  string game_id = 1;
-  string user_id = 2; // Validated via TMS
+  string ID = 1;
+  string userID = 2; // Validated via TMS
 }
 
 message StartGameRequest {
-  string game_id = 1;
+  string ID = 1;
 }
 
 message EndGameRequest {
-  string game_id = 1;
-  string winner_user_id = 2;
+  string ID = 1;
+  string winnerUserID = 2;
 }
 
 message GetGameStateRequest {
-  string game_id = 1;
+  string ID = 1;
 }
 
 message GameResponse {
-  string game_id = 1;
+  string ID = 1;
   string message = 2;
   string status = 3; // pending, active, finished
 }
 
 message GameStateResponse {
-  string game_id = 1;
+  string ID = 1;
   repeated Player players = 2;
   string status = 3;
 }
 
 message Player {
-  string id = 1;
-  string gamer_tag = 2;
-  string avatar_url = 3;
-  bool is_ready = 4;
+  string ID = 1;
+  string gamerTag = 2;
+  string avatarURL = 3;
+  bool isReady = 4;
 }
