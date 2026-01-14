@@ -25,8 +25,8 @@ type CreateUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
-	GamerTag      string                 `protobuf:"bytes,3,opt,name=gamer_tag,json=gamerTag,proto3" json:"gamer_tag,omitempty"`
-	AvatarUrl     string                 `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
+	GamerTag      string                 `protobuf:"bytes,3,opt,name=gamerTag,proto3" json:"gamerTag,omitempty"`
+	AvatarURL     string                 `protobuf:"bytes,4,opt,name=avatarURL,proto3" json:"avatarURL,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -82,16 +82,16 @@ func (x *CreateUserRequest) GetGamerTag() string {
 	return ""
 }
 
-func (x *CreateUserRequest) GetAvatarUrl() string {
+func (x *CreateUserRequest) GetAvatarURL() string {
 	if x != nil {
-		return x.AvatarUrl
+		return x.AvatarURL
 	}
 	return ""
 }
 
 type GetUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -126,21 +126,21 @@ func (*GetUserRequest) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetUserRequest) GetId() string {
+func (x *GetUserRequest) GetID() string {
 	if x != nil {
-		return x.Id
+		return x.ID
 	}
 	return ""
 }
 
 type UserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	GamerTag      string                 `protobuf:"bytes,3,opt,name=gamer_tag,json=gamerTag,proto3" json:"gamer_tag,omitempty"`
-	AvatarUrl     string                 `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
-	AccessToken   string                 `protobuf:"bytes,5,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
-	RefreshToken  string                 `protobuf:"bytes,6,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	GamerTag      string                 `protobuf:"bytes,3,opt,name=gamerTag,proto3" json:"gamerTag,omitempty"`
+	AvatarURL     string                 `protobuf:"bytes,4,opt,name=avatarURL,proto3" json:"avatarURL,omitempty"`
+	AccessToken   string                 `protobuf:"bytes,5,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,6,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -175,9 +175,9 @@ func (*UserResponse) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *UserResponse) GetId() string {
+func (x *UserResponse) GetID() string {
 	if x != nil {
-		return x.Id
+		return x.ID
 	}
 	return ""
 }
@@ -196,9 +196,9 @@ func (x *UserResponse) GetGamerTag() string {
 	return ""
 }
 
-func (x *UserResponse) GetAvatarUrl() string {
+func (x *UserResponse) GetAvatarURL() string {
 	if x != nil {
-		return x.AvatarUrl
+		return x.AvatarURL
 	}
 	return ""
 }
@@ -222,23 +222,21 @@ var File_user_proto protoreflect.FileDescriptor
 const file_user_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"user.proto\x12\x04user\x1a\fcommon.proto\"\x81\x01\n" +
+	"user.proto\x12\x04user\x1a\fcommon.proto\"\x7f\n" +
 	"\x11CreateUserRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x1b\n" +
-	"\tgamer_tag\x18\x03 \x01(\tR\bgamerTag\x12\x1d\n" +
-	"\n" +
-	"avatar_url\x18\x04 \x01(\tR\tavatarUrl\" \n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x1a\n" +
+	"\bgamerTag\x18\x03 \x01(\tR\bgamerTag\x12\x1c\n" +
+	"\tavatarURL\x18\x04 \x01(\tR\tavatarURL\" \n" +
 	"\x0eGetUserRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\xb8\x01\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\"\xb4\x01\n" +
 	"\fUserResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
-	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1b\n" +
-	"\tgamer_tag\x18\x03 \x01(\tR\bgamerTag\x12\x1d\n" +
-	"\n" +
-	"avatar_url\x18\x04 \x01(\tR\tavatarUrl\x12!\n" +
-	"\faccess_token\x18\x05 \x01(\tR\vaccessToken\x12#\n" +
-	"\rrefresh_token\x18\x06 \x01(\tR\frefreshToken2\x99\x02\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
+	"\bgamerTag\x18\x03 \x01(\tR\bgamerTag\x12\x1c\n" +
+	"\tavatarURL\x18\x04 \x01(\tR\tavatarURL\x12 \n" +
+	"\vaccessToken\x18\x05 \x01(\tR\vaccessToken\x12\"\n" +
+	"\frefreshToken\x18\x06 \x01(\tR\frefreshToken2\x99\x02\n" +
 	"\vUserService\x129\n" +
 	"\n" +
 	"CreateUser\x12\x17.user.CreateUserRequest\x1a\x12.user.UserResponse\x123\n" +
