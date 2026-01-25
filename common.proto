@@ -20,3 +20,10 @@ message HealthCheckRequest {}
 message HealthCheckResponse {
   string status = 1; // "ok" or "fail"
 }
+
+message Player {
+  string ID = 1;
+  string gamerTag = 2;
+  string avatarURL = 3;
+  bool isReady = 4;
+}
