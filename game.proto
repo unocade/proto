@@ -50,13 +50,8 @@ message GameResponse {
 
 message GameStateResponse {
   string ID = 1;
-  repeated Player players = 2;
+  repeated common.Player players = 2;
   string status = 3;
 }
 
-message Player {
-  string ID = 1;
-  string gamerTag = 2;
-  string avatarURL = 3;
-  bool isReady = 4;
-}
+
