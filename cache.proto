@@ -38,6 +38,7 @@ service CacheService {
 
   // -------------Queue-----------------------------
   rpc EnqueueCommand(EnqueueCommandRequest) returns (EnqueueCommandResponse);
+  rpc DequeueCommand(DequeueCommandRequest) returns (DequeueCommandResponse);
 
   // ---------------- Health ----------------
   rpc HealthCheck(common.HealthCheckRequest)
@@ -124,6 +125,11 @@ message EnqueueCommandRequest {
   bytes command = 3;        // serialized GameCommand
 }
 
+message DequeueCommandRequest {
+  string namespace = 1;     // gms
+  string stream_key = 2;    // game:{gameId}
+}
+
 
 // ==================== Responses ====================
 
@@ -157,4 +163,10 @@ message IncrementResponse {
 message EnqueueCommandResponse {
   bool accepted = 1;
   string message = 2;
+}
+
+message DequeueCommandResponse {
+  bool accepted = 1;
+  string message = 2;
+  bytes command = 3;
 }
