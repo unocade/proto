@@ -234,6 +234,74 @@ func (x *HealthCheckResponse) GetStatus() string {
 	return ""
 }
 
+type Player struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	GamerTag      string                 `protobuf:"bytes,2,opt,name=gamerTag,proto3" json:"gamerTag,omitempty"`
+	AvatarURL     string                 `protobuf:"bytes,3,opt,name=avatarURL,proto3" json:"avatarURL,omitempty"`
+	IsReady       bool                   `protobuf:"varint,4,opt,name=isReady,proto3" json:"isReady,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Player) Reset() {
+	*x = Player{}
+	mi := &file_common_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Player) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Player) ProtoMessage() {}
+
+func (x *Player) ProtoReflect() protoreflect.Message {
+	mi := &file_common_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Player.ProtoReflect.Descriptor instead.
+func (*Player) Descriptor() ([]byte, []int) {
+	return file_common_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *Player) GetID() string {
+	if x != nil {
+		return x.ID
+	}
+	return ""
+}
+
+func (x *Player) GetGamerTag() string {
+	if x != nil {
+		return x.GamerTag
+	}
+	return ""
+}
+
+func (x *Player) GetAvatarURL() string {
+	if x != nil {
+		return x.AvatarURL
+	}
+	return ""
+}
+
+func (x *Player) GetIsReady() bool {
+	if x != nil {
+		return x.IsReady
+	}
+	return false
+}
+
 var File_common_proto protoreflect.FileDescriptor
 
 const file_common_proto_rawDesc = "" +
@@ -247,7 +315,12 @@ const file_common_proto_rawDesc = "" +
 	"\amessage\x18\x01 \x01(\tR\amessage\"\x14\n" +
 	"\x12HealthCheckRequest\"-\n" +
 	"\x13HealthCheckResponse\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\tR\x06statusB\aZ\x05./;pbb\x06proto3"
+	"\x06status\x18\x01 \x01(\tR\x06status\"l\n" +
+	"\x06Player\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x1a\n" +
+	"\bgamerTag\x18\x02 \x01(\tR\bgamerTag\x12\x1c\n" +
+	"\tavatarURL\x18\x03 \x01(\tR\tavatarURL\x12\x18\n" +
+	"\aisReady\x18\x04 \x01(\bR\aisReadyB\aZ\x05./;pbb\x06proto3"
 
 var (
 	file_common_proto_rawDescOnce sync.Once
@@ -261,13 +334,14 @@ func file_common_proto_rawDescGZIP() []byte {
 	return file_common_proto_rawDescData
 }
 
-var file_common_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_common_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_common_proto_goTypes = []any{
 	(*RegisterServiceRequest)(nil),  // 0: common.RegisterServiceRequest
 	(*Empty)(nil),                   // 1: common.Empty
 	(*RegisterServiceResponse)(nil), // 2: common.RegisterServiceResponse
 	(*HealthCheckRequest)(nil),      // 3: common.HealthCheckRequest
 	(*HealthCheckResponse)(nil),     // 4: common.HealthCheckResponse
+	(*Player)(nil),                  // 5: common.Player
 }
 var file_common_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -288,7 +362,7 @@ func file_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_proto_rawDesc), len(file_common_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

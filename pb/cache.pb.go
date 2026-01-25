@@ -701,6 +701,58 @@ func (x *EnqueueCommandRequest) GetCommand() []byte {
 	return nil
 }
 
+type DequeueCommandRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`                  // gms
+	StreamKey     string                 `protobuf:"bytes,2,opt,name=stream_key,json=streamKey,proto3" json:"stream_key,omitempty"` // game:{gameId}
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DequeueCommandRequest) Reset() {
+	*x = DequeueCommandRequest{}
+	mi := &file_cache_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DequeueCommandRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DequeueCommandRequest) ProtoMessage() {}
+
+func (x *DequeueCommandRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DequeueCommandRequest.ProtoReflect.Descriptor instead.
+func (*DequeueCommandRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DequeueCommandRequest) GetNamespace() string {
+	if x != nil {
+		return x.Namespace
+	}
+	return ""
+}
+
+func (x *DequeueCommandRequest) GetStreamKey() string {
+	if x != nil {
+		return x.StreamKey
+	}
+	return ""
+}
+
 type CacheResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -711,7 +763,7 @@ type CacheResponse struct {
 
 func (x *CacheResponse) Reset() {
 	*x = CacheResponse{}
-	mi := &file_cache_proto_msgTypes[12]
+	mi := &file_cache_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -723,7 +775,7 @@ func (x *CacheResponse) String() string {
 func (*CacheResponse) ProtoMessage() {}
 
 func (x *CacheResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[12]
+	mi := &file_cache_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -736,7 +788,7 @@ func (x *CacheResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CacheResponse.ProtoReflect.Descriptor instead.
 func (*CacheResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{12}
+	return file_cache_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CacheResponse) GetSuccess() bool {
@@ -763,7 +815,7 @@ type GetResponse struct {
 
 func (x *GetResponse) Reset() {
 	*x = GetResponse{}
-	mi := &file_cache_proto_msgTypes[13]
+	mi := &file_cache_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -775,7 +827,7 @@ func (x *GetResponse) String() string {
 func (*GetResponse) ProtoMessage() {}
 
 func (x *GetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[13]
+	mi := &file_cache_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -788,7 +840,7 @@ func (x *GetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetResponse.ProtoReflect.Descriptor instead.
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{13}
+	return file_cache_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetResponse) GetFound() bool {
@@ -815,7 +867,7 @@ type GetAllResponse struct {
 
 func (x *GetAllResponse) Reset() {
 	*x = GetAllResponse{}
-	mi := &file_cache_proto_msgTypes[14]
+	mi := &file_cache_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -827,7 +879,7 @@ func (x *GetAllResponse) String() string {
 func (*GetAllResponse) ProtoMessage() {}
 
 func (x *GetAllResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[14]
+	mi := &file_cache_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -840,7 +892,7 @@ func (x *GetAllResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllResponse.ProtoReflect.Descriptor instead.
 func (*GetAllResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{14}
+	return file_cache_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetAllResponse) GetFound() bool {
@@ -866,7 +918,7 @@ type ExistsResponse struct {
 
 func (x *ExistsResponse) Reset() {
 	*x = ExistsResponse{}
-	mi := &file_cache_proto_msgTypes[15]
+	mi := &file_cache_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -878,7 +930,7 @@ func (x *ExistsResponse) String() string {
 func (*ExistsResponse) ProtoMessage() {}
 
 func (x *ExistsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[15]
+	mi := &file_cache_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -891,7 +943,7 @@ func (x *ExistsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExistsResponse.ProtoReflect.Descriptor instead.
 func (*ExistsResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{15}
+	return file_cache_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ExistsResponse) GetExists() bool {
@@ -910,7 +962,7 @@ type HGetAllResponse struct {
 
 func (x *HGetAllResponse) Reset() {
 	*x = HGetAllResponse{}
-	mi := &file_cache_proto_msgTypes[16]
+	mi := &file_cache_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -922,7 +974,7 @@ func (x *HGetAllResponse) String() string {
 func (*HGetAllResponse) ProtoMessage() {}
 
 func (x *HGetAllResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[16]
+	mi := &file_cache_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -935,7 +987,7 @@ func (x *HGetAllResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HGetAllResponse.ProtoReflect.Descriptor instead.
 func (*HGetAllResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{16}
+	return file_cache_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *HGetAllResponse) GetFields() map[string][]byte {
@@ -954,7 +1006,7 @@ type IncrementResponse struct {
 
 func (x *IncrementResponse) Reset() {
 	*x = IncrementResponse{}
-	mi := &file_cache_proto_msgTypes[17]
+	mi := &file_cache_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -966,7 +1018,7 @@ func (x *IncrementResponse) String() string {
 func (*IncrementResponse) ProtoMessage() {}
 
 func (x *IncrementResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[17]
+	mi := &file_cache_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -979,7 +1031,7 @@ func (x *IncrementResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncrementResponse.ProtoReflect.Descriptor instead.
 func (*IncrementResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{17}
+	return file_cache_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *IncrementResponse) GetValue() int64 {
@@ -999,7 +1051,7 @@ type EnqueueCommandResponse struct {
 
 func (x *EnqueueCommandResponse) Reset() {
 	*x = EnqueueCommandResponse{}
-	mi := &file_cache_proto_msgTypes[18]
+	mi := &file_cache_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1011,7 +1063,7 @@ func (x *EnqueueCommandResponse) String() string {
 func (*EnqueueCommandResponse) ProtoMessage() {}
 
 func (x *EnqueueCommandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[18]
+	mi := &file_cache_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1024,7 +1076,7 @@ func (x *EnqueueCommandResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnqueueCommandResponse.ProtoReflect.Descriptor instead.
 func (*EnqueueCommandResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{18}
+	return file_cache_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *EnqueueCommandResponse) GetAccepted() bool {
@@ -1039,6 +1091,66 @@ func (x *EnqueueCommandResponse) GetMessage() string {
 		return x.Message
 	}
 	return ""
+}
+
+type DequeueCommandResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Accepted      bool                   `protobuf:"varint,1,opt,name=accepted,proto3" json:"accepted,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Command       []byte                 `protobuf:"bytes,3,opt,name=command,proto3" json:"command,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DequeueCommandResponse) Reset() {
+	*x = DequeueCommandResponse{}
+	mi := &file_cache_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DequeueCommandResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DequeueCommandResponse) ProtoMessage() {}
+
+func (x *DequeueCommandResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DequeueCommandResponse.ProtoReflect.Descriptor instead.
+func (*DequeueCommandResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *DequeueCommandResponse) GetAccepted() bool {
+	if x != nil {
+		return x.Accepted
+	}
+	return false
+}
+
+func (x *DequeueCommandResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *DequeueCommandResponse) GetCommand() []byte {
+	if x != nil {
+		return x.Command
+	}
+	return nil
 }
 
 var File_cache_proto protoreflect.FileDescriptor
@@ -1096,7 +1208,11 @@ const file_cache_proto_rawDesc = "" +
 	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x1d\n" +
 	"\n" +
 	"stream_key\x18\x02 \x01(\tR\tstreamKey\x12\x18\n" +
-	"\acommand\x18\x03 \x01(\fR\acommand\"C\n" +
+	"\acommand\x18\x03 \x01(\fR\acommand\"T\n" +
+	"\x15DequeueCommandRequest\x12\x1c\n" +
+	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x1d\n" +
+	"\n" +
+	"stream_key\x18\x02 \x01(\tR\tstreamKey\"C\n" +
 	"\rCacheResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"9\n" +
@@ -1117,7 +1233,11 @@ const file_cache_proto_rawDesc = "" +
 	"\x05value\x18\x01 \x01(\x03R\x05value\"N\n" +
 	"\x16EnqueueCommandResponse\x12\x1a\n" +
 	"\baccepted\x18\x01 \x01(\bR\baccepted\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\xc7\x06\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"h\n" +
+	"\x16DequeueCommandResponse\x12\x1a\n" +
+	"\baccepted\x18\x01 \x01(\bR\baccepted\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
+	"\acommand\x18\x03 \x01(\fR\acommand2\x96\a\n" +
 	"\fCacheService\x12.\n" +
 	"\x03Set\x12\x11.cache.SetRequest\x1a\x14.cache.CacheResponse\x12,\n" +
 	"\x03Get\x12\x11.cache.GetRequest\x1a\x12.cache.GetResponse\x124\n" +
@@ -1130,7 +1250,8 @@ const file_cache_proto_rawDesc = "" +
 	"\aHDelete\x12\x15.cache.HDeleteRequest\x1a\x14.cache.CacheResponse\x12>\n" +
 	"\tIncrement\x12\x17.cache.IncrementRequest\x1a\x18.cache.IncrementResponse\x126\n" +
 	"\aPublish\x12\x15.cache.PublishRequest\x1a\x14.cache.CacheResponse\x12M\n" +
-	"\x0eEnqueueCommand\x12\x1c.cache.EnqueueCommandRequest\x1a\x1d.cache.EnqueueCommandResponse\x12F\n" +
+	"\x0eEnqueueCommand\x12\x1c.cache.EnqueueCommandRequest\x1a\x1d.cache.EnqueueCommandResponse\x12M\n" +
+	"\x0eDequeueCommand\x12\x1c.cache.DequeueCommandRequest\x1a\x1d.cache.DequeueCommandResponse\x12F\n" +
 	"\vHealthCheck\x12\x1a.common.HealthCheckRequest\x1a\x1b.common.HealthCheckResponse\x12R\n" +
 	"\x0fRegisterService\x12\x1e.common.RegisterServiceRequest\x1a\x1f.common.RegisterServiceResponseB\aZ\x05./;pbb\x06proto3"
 
@@ -1146,7 +1267,7 @@ func file_cache_proto_rawDescGZIP() []byte {
 	return file_cache_proto_rawDescData
 }
 
-var file_cache_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_cache_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
 var file_cache_proto_goTypes = []any{
 	(*SetRequest)(nil),              // 0: cache.SetRequest
 	(*GetRequest)(nil),              // 1: cache.GetRequest
@@ -1160,23 +1281,25 @@ var file_cache_proto_goTypes = []any{
 	(*IncrementRequest)(nil),        // 9: cache.IncrementRequest
 	(*PublishRequest)(nil),          // 10: cache.PublishRequest
 	(*EnqueueCommandRequest)(nil),   // 11: cache.EnqueueCommandRequest
-	(*CacheResponse)(nil),           // 12: cache.CacheResponse
-	(*GetResponse)(nil),             // 13: cache.GetResponse
-	(*GetAllResponse)(nil),          // 14: cache.GetAllResponse
-	(*ExistsResponse)(nil),          // 15: cache.ExistsResponse
-	(*HGetAllResponse)(nil),         // 16: cache.HGetAllResponse
-	(*IncrementResponse)(nil),       // 17: cache.IncrementResponse
-	(*EnqueueCommandResponse)(nil),  // 18: cache.EnqueueCommandResponse
-	nil,                             // 19: cache.HSetRequest.FieldsEntry
-	nil,                             // 20: cache.HGetAllResponse.FieldsEntry
-	(*HealthCheckRequest)(nil),      // 21: common.HealthCheckRequest
-	(*RegisterServiceRequest)(nil),  // 22: common.RegisterServiceRequest
-	(*HealthCheckResponse)(nil),     // 23: common.HealthCheckResponse
-	(*RegisterServiceResponse)(nil), // 24: common.RegisterServiceResponse
+	(*DequeueCommandRequest)(nil),   // 12: cache.DequeueCommandRequest
+	(*CacheResponse)(nil),           // 13: cache.CacheResponse
+	(*GetResponse)(nil),             // 14: cache.GetResponse
+	(*GetAllResponse)(nil),          // 15: cache.GetAllResponse
+	(*ExistsResponse)(nil),          // 16: cache.ExistsResponse
+	(*HGetAllResponse)(nil),         // 17: cache.HGetAllResponse
+	(*IncrementResponse)(nil),       // 18: cache.IncrementResponse
+	(*EnqueueCommandResponse)(nil),  // 19: cache.EnqueueCommandResponse
+	(*DequeueCommandResponse)(nil),  // 20: cache.DequeueCommandResponse
+	nil,                             // 21: cache.HSetRequest.FieldsEntry
+	nil,                             // 22: cache.HGetAllResponse.FieldsEntry
+	(*HealthCheckRequest)(nil),      // 23: common.HealthCheckRequest
+	(*RegisterServiceRequest)(nil),  // 24: common.RegisterServiceRequest
+	(*HealthCheckResponse)(nil),     // 25: common.HealthCheckResponse
+	(*RegisterServiceResponse)(nil), // 26: common.RegisterServiceResponse
 }
 var file_cache_proto_depIdxs = []int32{
-	19, // 0: cache.HSetRequest.fields:type_name -> cache.HSetRequest.FieldsEntry
-	20, // 1: cache.HGetAllResponse.fields:type_name -> cache.HGetAllResponse.FieldsEntry
+	21, // 0: cache.HSetRequest.fields:type_name -> cache.HSetRequest.FieldsEntry
+	22, // 1: cache.HGetAllResponse.fields:type_name -> cache.HGetAllResponse.FieldsEntry
 	0,  // 2: cache.CacheService.Set:input_type -> cache.SetRequest
 	1,  // 3: cache.CacheService.Get:input_type -> cache.GetRequest
 	3,  // 4: cache.CacheService.Delete:input_type -> cache.DeleteRequest
@@ -1189,24 +1312,26 @@ var file_cache_proto_depIdxs = []int32{
 	9,  // 11: cache.CacheService.Increment:input_type -> cache.IncrementRequest
 	10, // 12: cache.CacheService.Publish:input_type -> cache.PublishRequest
 	11, // 13: cache.CacheService.EnqueueCommand:input_type -> cache.EnqueueCommandRequest
-	21, // 14: cache.CacheService.HealthCheck:input_type -> common.HealthCheckRequest
-	22, // 15: cache.CacheService.RegisterService:input_type -> common.RegisterServiceRequest
-	12, // 16: cache.CacheService.Set:output_type -> cache.CacheResponse
-	13, // 17: cache.CacheService.Get:output_type -> cache.GetResponse
-	12, // 18: cache.CacheService.Delete:output_type -> cache.CacheResponse
-	15, // 19: cache.CacheService.Exists:output_type -> cache.ExistsResponse
-	14, // 20: cache.CacheService.GetAll:output_type -> cache.GetAllResponse
-	12, // 21: cache.CacheService.HSet:output_type -> cache.CacheResponse
-	13, // 22: cache.CacheService.HGet:output_type -> cache.GetResponse
-	16, // 23: cache.CacheService.HGetAll:output_type -> cache.HGetAllResponse
-	12, // 24: cache.CacheService.HDelete:output_type -> cache.CacheResponse
-	17, // 25: cache.CacheService.Increment:output_type -> cache.IncrementResponse
-	12, // 26: cache.CacheService.Publish:output_type -> cache.CacheResponse
-	18, // 27: cache.CacheService.EnqueueCommand:output_type -> cache.EnqueueCommandResponse
-	23, // 28: cache.CacheService.HealthCheck:output_type -> common.HealthCheckResponse
-	24, // 29: cache.CacheService.RegisterService:output_type -> common.RegisterServiceResponse
-	16, // [16:30] is the sub-list for method output_type
-	2,  // [2:16] is the sub-list for method input_type
+	12, // 14: cache.CacheService.DequeueCommand:input_type -> cache.DequeueCommandRequest
+	23, // 15: cache.CacheService.HealthCheck:input_type -> common.HealthCheckRequest
+	24, // 16: cache.CacheService.RegisterService:input_type -> common.RegisterServiceRequest
+	13, // 17: cache.CacheService.Set:output_type -> cache.CacheResponse
+	14, // 18: cache.CacheService.Get:output_type -> cache.GetResponse
+	13, // 19: cache.CacheService.Delete:output_type -> cache.CacheResponse
+	16, // 20: cache.CacheService.Exists:output_type -> cache.ExistsResponse
+	15, // 21: cache.CacheService.GetAll:output_type -> cache.GetAllResponse
+	13, // 22: cache.CacheService.HSet:output_type -> cache.CacheResponse
+	14, // 23: cache.CacheService.HGet:output_type -> cache.GetResponse
+	17, // 24: cache.CacheService.HGetAll:output_type -> cache.HGetAllResponse
+	13, // 25: cache.CacheService.HDelete:output_type -> cache.CacheResponse
+	18, // 26: cache.CacheService.Increment:output_type -> cache.IncrementResponse
+	13, // 27: cache.CacheService.Publish:output_type -> cache.CacheResponse
+	19, // 28: cache.CacheService.EnqueueCommand:output_type -> cache.EnqueueCommandResponse
+	20, // 29: cache.CacheService.DequeueCommand:output_type -> cache.DequeueCommandResponse
+	25, // 30: cache.CacheService.HealthCheck:output_type -> common.HealthCheckResponse
+	26, // 31: cache.CacheService.RegisterService:output_type -> common.RegisterServiceResponse
+	17, // [17:32] is the sub-list for method output_type
+	2,  // [2:17] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name
 	2,  // [2:2] is the sub-list for extension extendee
 	0,  // [0:2] is the sub-list for field type_name
@@ -1224,7 +1349,7 @@ func file_cache_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_cache_proto_rawDesc), len(file_cache_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   23,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -31,6 +31,7 @@ const (
 	CacheService_Increment_FullMethodName       = "/cache.CacheService/Increment"
 	CacheService_Publish_FullMethodName         = "/cache.CacheService/Publish"
 	CacheService_EnqueueCommand_FullMethodName  = "/cache.CacheService/EnqueueCommand"
+	CacheService_DequeueCommand_FullMethodName  = "/cache.CacheService/DequeueCommand"
 	CacheService_HealthCheck_FullMethodName     = "/cache.CacheService/HealthCheck"
 	CacheService_RegisterService_FullMethodName = "/cache.CacheService/RegisterService"
 )
@@ -56,6 +57,7 @@ type CacheServiceClient interface {
 	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*CacheResponse, error)
 	// -------------Queue-----------------------------
 	EnqueueCommand(ctx context.Context, in *EnqueueCommandRequest, opts ...grpc.CallOption) (*EnqueueCommandResponse, error)
+	DequeueCommand(ctx context.Context, in *DequeueCommandRequest, opts ...grpc.CallOption) (*DequeueCommandResponse, error)
 	// ---------------- Health ----------------
 	HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
 	RegisterService(ctx context.Context, in *RegisterServiceRequest, opts ...grpc.CallOption) (*RegisterServiceResponse, error)
@@ -189,6 +191,16 @@ func (c *cacheServiceClient) EnqueueCommand(ctx context.Context, in *EnqueueComm
 	return out, nil
 }
 
+func (c *cacheServiceClient) DequeueCommand(ctx context.Context, in *DequeueCommandRequest, opts ...grpc.CallOption) (*DequeueCommandResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DequeueCommandResponse)
+	err := c.cc.Invoke(ctx, CacheService_DequeueCommand_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cacheServiceClient) HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(HealthCheckResponse)
@@ -230,6 +242,7 @@ type CacheServiceServer interface {
 	Publish(context.Context, *PublishRequest) (*CacheResponse, error)
 	// -------------Queue-----------------------------
 	EnqueueCommand(context.Context, *EnqueueCommandRequest) (*EnqueueCommandResponse, error)
+	DequeueCommand(context.Context, *DequeueCommandRequest) (*DequeueCommandResponse, error)
 	// ---------------- Health ----------------
 	HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
 	RegisterService(context.Context, *RegisterServiceRequest) (*RegisterServiceResponse, error)
@@ -278,6 +291,9 @@ func (UnimplementedCacheServiceServer) Publish(context.Context, *PublishRequest)
 }
 func (UnimplementedCacheServiceServer) EnqueueCommand(context.Context, *EnqueueCommandRequest) (*EnqueueCommandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EnqueueCommand not implemented")
+}
+func (UnimplementedCacheServiceServer) DequeueCommand(context.Context, *DequeueCommandRequest) (*DequeueCommandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DequeueCommand not implemented")
 }
 func (UnimplementedCacheServiceServer) HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
@@ -522,6 +538,24 @@ func _CacheService_EnqueueCommand_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CacheService_DequeueCommand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DequeueCommandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).DequeueCommand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_DequeueCommand_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).DequeueCommand(ctx, req.(*DequeueCommandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CacheService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(HealthCheckRequest)
 	if err := dec(in); err != nil {
@@ -612,6 +646,10 @@ var CacheService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EnqueueCommand",
 			Handler:    _CacheService_EnqueueCommand_Handler,
+		},
+		{
+			MethodName: "DequeueCommand",
+			Handler:    _CacheService_DequeueCommand_Handler,
 		},
 		{
 			MethodName: "HealthCheck",
