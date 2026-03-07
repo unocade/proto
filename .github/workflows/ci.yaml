@@ -1,5 +1,5 @@
 name: proto-ci
-on: [ push, workflow_dispatch ]
+on: [push, workflow_dispatch]
 
 jobs:
   proto:
@@ -8,24 +8,48 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Install make (needed for your Makefile)
+      - name: Install make
+        run: |
+          if ! command -v make &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y make
+          fi
+
+      # Install protoc
       - name: Install protoc
         uses: arduino/setup-protoc@v2
 
+      # Install Go with caching
       - name: Install Go
         uses: actions/setup-go@v5
         with:
           go-version: 1.26.0
+          cache: true
 
+      # Cache Go binaries (protoc plugins) to avoid rebuilding every run
+      - name: Cache Go binaries
+        uses: actions/cache@v3
+        with:
+          path: |
+            $GOPATH/bin
+            $GOCACHE
+            $GOMODCACHE
+          key: go-binaries-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+
+      # Install protoc plugins (pinned versions for reproducibility)
       - name: Install plugins
         run: |
-          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.6.1
 
+      # Generate protobuf files
       - name: Generate protobuf
         run: make generate
 
+      # Check generated files committed
       - name: Check generated files committed
         run: git diff --exit-code
 
+      # Build Go code
       - name: Go build
         run: go build ./...
