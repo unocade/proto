@@ -1,12 +1,21 @@
 name: proto-ci
 on: [push, workflow_dispatch]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   proto:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+
+      - name: Debug protoc
+      - run: |
+      - which protoc
+      - protoc --version
 
       # Install make (needed for your Makefile)
       - name: Install make
@@ -17,20 +26,20 @@ jobs:
 
       # Install protoc
       - name: Install protoc
-        uses: arduino/setup-protoc@v2
+        uses: arduino/setup-protoc@v3
         with:
           version: "3.21.12"
 
       # Install Go with caching
       - name: Install Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6.3.0
         with:
           go-version: 1.26.0
           cache: true
 
       # Cache Go binaries (protoc plugins) to avoid rebuilding every run
       - name: Cache Go binaries
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: |
             $GOPATH/bin
