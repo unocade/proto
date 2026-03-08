@@ -25,12 +25,6 @@ jobs:
         with:
           version: "21.12"
 
-      - name: Debug protoc
-        run: |
-          which protoc
-          protoc --version
-
-
       # Install Go with caching
       - name: Install Go
         uses: actions/setup-go@v6.3.0
@@ -42,10 +36,7 @@ jobs:
       - name: Cache Go binaries
         uses: actions/cache@v5
         with:
-          path: |
-            $GOPATH/bin
-            $GOCACHE
-            $GOMODCACHE
+          path: ~/go/bin
           key: go-binaries-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
 
       # Install protoc plugins (pinned versions for reproducibility)
