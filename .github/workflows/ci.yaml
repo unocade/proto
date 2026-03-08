@@ -13,9 +13,9 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Debug protoc
-      - run: |
-      - which protoc
-      - protoc --version
+        run: |
+          which protoc
+          protoc --version
 
       # Install make (needed for your Makefile)
       - name: Install make
