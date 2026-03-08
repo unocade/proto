@@ -18,6 +18,8 @@ jobs:
       # Install protoc
       - name: Install protoc
         uses: arduino/setup-protoc@v2
+        with:
+          version: "3.21.12"
 
       # Install Go with caching
       - name: Install Go
