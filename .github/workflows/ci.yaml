@@ -12,11 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Debug protoc
-        run: |
-          which protoc
-          protoc --version
-
       # Install make (needed for your Makefile)
       - name: Install make
         run: |
@@ -29,6 +24,12 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           version: "3.21.12"
+
+      - name: Debug protoc
+        run: |
+          which protoc
+          protoc --version
+
 
       # Install Go with caching
       - name: Install Go
