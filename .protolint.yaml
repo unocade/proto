@@ -1,0 +1,32 @@
+# protolint configuration — see https://github.com/yoheimuta/protolint
+#
+# all_default enables protolint's full default rule set. Only two rules are
+# removed, and both are removed because enforcing them is a BREAKING change
+# for the services that consume this module, not a lint preference:
+#
+#   FIELD_NAMES_LOWER_SNAKE_CASE
+#     Renaming e.g. `ID` -> `id` or `avatarURL` -> `avatar_url` changes the
+#     generated Go identifiers (pb.Player.ID -> pb.Player.Id,
+#     pb.UserResponse.AvatarURL -> .AvatarUrl) AND the proto3 JSON names
+#     (`avatarURL` -> `avatarUrl`). That breaks user-management-service
+#     (pb.UserResponse{GamerTag:, AvatarURL:} in domain/user.go and
+#     grpcserver/grpchandler.go) and the frontend's JSON payloads.
+#
+#   REPEATED_FIELD_NAMES_PLURALIZED
+#     `repeated string value` -> `values` changes pb.GetAllResponse.Value to
+#     .Values, breaking cache-management-service/grpcserver/redis.go.
+#
+# Re-enabling either rule is an org-wide breaking change: it needs a rename
+# pass across every consuming service, not just this repo.
+lint:
+  # The engine_service_template.proto scaffold lives in templates/, outside the
+  # linted directory, so nothing needs excluding here.
+  rules:
+    # NOTE: do NOT set `all_default: true` here. Despite the name, it enables
+    # *every* rule protolint ships (including the optional comment rules
+    # FIELDS_HAVE_COMMENT / MESSAGES_HAVE_COMMENT / RPCS_HAVE_COMMENT /
+    # SERVICES_HAVE_COMMENT / FILE_HAS_COMMENT), which this repo does not
+    # follow. Leaving it unset keeps protolint's built-in default set.
+    remove:
+      - FIELD_NAMES_LOWER_SNAKE_CASE
+      - REPEATED_FIELD_NAMES_PLURALIZED
