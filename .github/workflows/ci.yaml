@@ -1,13 +1,48 @@
 name: proto-ci
-on: [push, workflow_dispatch]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+# Default to read-only. The publish steps authenticate with a PAT
+# (secrets.ACCESS_TOKEN), so no workflow token write scope is needed.
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Do not cancel in progress: the publish steps push to dev and create
+  # tags, and a half-finished run should not be interrupted.
+  cancel-in-progress: false
 
 jobs:
+  lint:
+    name: protolint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      # Install Go with caching
+      - name: Install Go
+        uses: actions/setup-go@v6.3.0
+        with:
+          go-version: 1.26.0
+          cache: true
+
+      # Pinned for reproducibility: a different protolint version can add or
+      # rename rules and change what passes.
+      - name: Install protolint
+        run: go install github.com/yoheimuta/protolint/cmd/protolint@v0.58.0
+
+      - name: Lint protos
+        run: protolint lint .protolint.yaml proto/
+
   proto:
-    runs-on: self-hosted
+    name: build and publish
+    # Lint gates the build and the release.
+    needs: lint
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6
@@ -40,19 +75,104 @@ jobs:
           key: go-binaries-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
 
       # Install protoc plugins (pinned versions for reproducibility)
+      # The plugin version is embedded in the generated file headers, so a
+      # different version produces a diff in every generated file.
       - name: Install plugins
         run: |
           go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
           go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.6.1
 
       # Generate protobuf files
+      # This validates that the .proto sources still compile, and produces the
+      # pb/ tree that the publish steps below commit.
       - name: Generate protobuf
         run: make generate
-
-      # Check generated files committed
-      - name: Check generated files committed
-        run: git diff --exit-code
 
       # Build Go code
       - name: Go build
         run: go build ./...
+
+      # ---------------------------------------------------------------------
+      # Publish. The generated code is published to the `master` branch, not
+      # to `dev`: dev is the source of truth for the .proto files, master is
+      # the published branch and the only one that gets version tags.
+      # Only on dev or master, and only on a push or a manual dispatch. Pull
+      # requests get the lint and build gates only.
+      # ---------------------------------------------------------------------
+      - name: Publish generated code
+        id: publish
+        # Publishing is driven by dev pushes only. A push to master (which is
+        # what this job itself does) must never publish again. A manual
+        # dispatch on dev or master can force a publish.
+        if: >-
+          (github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
+          (github.event_name == 'workflow_dispatch' &&
+          (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'))
+        env:
+          PAT: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          # Tree to publish: this checkout's tree with the regenerated pb/
+          # that the step above produced. pb/ is gitignored, so it has to be
+          # force-added.
+          git add -A -f pb/
+          TREE=$(git write-tree)
+
+          # Parent for the new commit: master's tip if master exists, else
+          # this branch's HEAD (first publish).
+          git fetch -q origin 'refs/heads/master:refs/remotes/origin/master' 2> /dev/null || true
+          if git rev-parse --verify refs/remotes/origin/master > /dev/null 2>&1; then
+            PARENT=$(git rev-parse refs/remotes/origin/master)
+            if [ "$TREE" = "$(git rev-parse "$PARENT^{tree}")" ]; then
+              echo "master is already up to date - nothing to publish"
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          else
+            PARENT=$(git rev-parse HEAD)
+          fi
+
+          # A commit whose parent is master's tip, so the push is always a
+          # fast-forward. No checkout, no force push.
+          COMMIT=$(git commit-tree "$TREE" -p "$PARENT" -m 'chore(pb): regenerate protobuf bindings')
+          echo "Publishing $COMMIT to master"
+          # Authenticate with the PAT instead of the workflow token, so the
+          # push is attributed to the PAT owner and triggers CI.
+          git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$PAT" | base64 -w0)" \
+            push origin "$COMMIT:refs/heads/master"
+          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Tag and publish release
+        if: steps.publish.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          COMMIT: ${{ steps.publish.outputs.commit }}
+        run: |
+          git fetch --tags --force
+          latest=$(git tag --list 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+          if [ -z "$latest" ]; then
+            version='v0.1.0-dev'
+          else
+            plain=${latest#v}
+            plain=${plain%%-*}
+            major=$(echo "$plain" | cut -d. -f1)
+            minor=$(echo "$plain" | cut -d. -f2)
+            patch=$(echo "$plain" | cut -d. -f3)
+            version="v${major}.${minor}.$((patch + 1))-dev"
+          fi
+          if git rev-parse -q --verify "refs/tags/$version" > /dev/null; then
+            echo "Tag $version already exists - reusing it"
+          else
+            git tag -a "$version" "$COMMIT" -m "Release $version"
+            git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" \
+              push origin "refs/tags/$version"
+          fi
+          if gh release view "$version" > /dev/null 2>&1; then
+            echo "Release $version already exists - nothing to publish"
+            exit 0
+          fi
+          echo "Releasing $version"
+          gh release create "$version" \
+            --title "Release $version" \
+            --notes 'Automated release generated by GitHub Actions' \
+            --prerelease
