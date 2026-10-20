@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package common;
+
 option go_package = "./;pb";
 
 // Shared messages across services
@@ -9,13 +10,15 @@ message RegisterServiceRequest {
   string service_port = 2;
 }
 
-message Empty {}
+message Empty {
+}
 
 message RegisterServiceResponse {
   string message = 1;
 }
 
-message HealthCheckRequest {}
+message HealthCheckRequest {
+}
 
 message HealthCheckResponse {
   string status = 1; // "ok" or "fail"

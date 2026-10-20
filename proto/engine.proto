@@ -1,9 +1,10 @@
 syntax = "proto3";
 
 package engine;
-option go_package = "./;pb";
 
 import "common.proto";
+
+option go_package = "./;pb";
 
 service EngineService {
   // Match lifecycle
@@ -12,8 +13,10 @@ service EngineService {
   rpc GetState(GetStateRequest) returns (GetStateResponse);
 
   // Health & registration
-  rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
-  rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
+  rpc HealthCheck(common.HealthCheckRequest)
+      returns (common.HealthCheckResponse);
+  rpc RegisterService(common.RegisterServiceRequest)
+      returns (common.RegisterServiceResponse);
 }
 
 message InitGameRequest {

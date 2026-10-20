@@ -1,16 +1,19 @@
 syntax = "proto3";
 
 package user;
-option go_package = "./;pb";
 
 import "common.proto";
+
+option go_package = "./;pb";
 
 service UserService {
   rpc CreateUser(CreateUserRequest) returns (UserResponse);
   rpc GetUser(GetUserRequest) returns (UserResponse);
   
-  rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
-  rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
+  rpc HealthCheck(common.HealthCheckRequest)
+      returns (common.HealthCheckResponse);
+  rpc RegisterService(common.RegisterServiceRequest)
+      returns (common.RegisterServiceResponse);
 }
 
 message CreateUserRequest {
@@ -32,4 +35,3 @@ message UserResponse {
   string accessToken = 5;
   string refreshToken = 6;
 }
-

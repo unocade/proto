@@ -1,9 +1,10 @@
 syntax = "proto3";
 
 package game;
-option go_package = "./;pb";
 
 import "common.proto";
+
+option go_package = "./;pb";
 
 service GameService {
   // Game lifecycle
@@ -14,8 +15,10 @@ service GameService {
   rpc GetGameState(GetGameStateRequest) returns (GameStateResponse);
 
   // Health & registration
-  rpc HealthCheck(common.HealthCheckRequest) returns (common.HealthCheckResponse);
-  rpc RegisterService(common.RegisterServiceRequest) returns (common.RegisterServiceResponse);
+  rpc HealthCheck(common.HealthCheckRequest)
+      returns (common.HealthCheckResponse);
+  rpc RegisterService(common.RegisterServiceRequest)
+      returns (common.RegisterServiceResponse);
 }
 
 message CreateGameRequest {
@@ -53,5 +56,3 @@ message GameStateResponse {
   repeated common.Player players = 2;
   string status = 3;
 }
-
-

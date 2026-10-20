@@ -1,9 +1,10 @@
 syntax = "proto3";
 
 package cache;
-option go_package = "./;pb";
 
 import "common.proto";
+
+option go_package = "./;pb";
 
 /*
   Cache Management Service (CMS)
@@ -129,7 +130,6 @@ message DequeueCommandRequest {
   string namespace = 1;     // gms
   string stream_key = 2;    // game:{gameId}
 }
-
 
 // ==================== Responses ====================
 
