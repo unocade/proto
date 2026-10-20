@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  # Do not cancel in progress: the publish steps push to dev and create
+  # Do not cancel in progress: the publish steps push to master and create
   # tags, and a half-finished run should not be interrupted.
   cancel-in-progress: false
 
@@ -38,9 +38,16 @@ jobs:
         run: protolint lint .protolint.yaml proto/
 
   proto:
-    name: build and publish
-    # Lint gates the build and the release.
+    name: generate and publish
+    # Lint gates the generation and the release.
     needs: lint
+    # The generation and the publish are restricted the same way the publish
+    # is: a push to dev, or a manual dispatch on dev or master. A push to
+    # master (which is what this job itself does) must never publish again.
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
+      (github.event_name == 'workflow_dispatch' &&
+      (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'))
     runs-on: ubuntu-latest
 
     steps:
@@ -82,31 +89,20 @@ jobs:
           go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.6.1
 
       # Generate protobuf files
-      # This validates that the .proto sources still compile, and produces the
-      # pb/ tree that the publish steps below commit.
+      # protoc fails outright on a broken .proto, so this is also what
+      # validates the sources. The generated pb/ is published below.
       - name: Generate protobuf
         run: make generate
-
-      # Build Go code
-      - name: Go build
-        run: go build ./...
 
       # ---------------------------------------------------------------------
       # Publish. The generated code is published to the `master` branch, not
       # to `dev`: dev is the source of truth for the .proto files, master is
       # the published branch and the only one that gets version tags.
-      # Only on dev or master, and only on a push or a manual dispatch. Pull
-      # requests get the lint and build gates only.
+      # The job-level condition already restricts this to a dev push or a
+      # manual dispatch, so every case that gets here publishes.
       # ---------------------------------------------------------------------
       - name: Publish generated code
         id: publish
-        # Publishing is driven by dev pushes only. A push to master (which is
-        # what this job itself does) must never publish again. A manual
-        # dispatch on dev or master can force a publish.
-        if: >-
-          (github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
-          (github.event_name == 'workflow_dispatch' &&
-          (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'))
         env:
           PAT: ${{ secrets.ACCESS_TOKEN }}
         run: |

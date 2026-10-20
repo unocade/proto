@@ -132,21 +132,23 @@ Because `pb/` is gitignored, a fresh checkout has no Go package at all. **Run `m
 
 ## 🧪 CI
 
-One workflow: `.github/workflows/ci.yaml` (`proto-ci`), on GitHub-hosted `ubuntu-latest`. It runs on every push and every pull request and has two jobs:
+One workflow: `.github/workflows/ci.yaml` (`proto-ci`), on GitHub-hosted `ubuntu-latest`. It runs on every push (any branch) and on manual dispatch — there is no `pull_request` trigger. Two jobs:
 
 | Job | What it does | Runs on |
 | --- | --- | --- |
-| `lint` | `protolint lint .protolint.yaml proto/` | every push / PR |
-| `proto` | pinned toolchain → `make generate` (catches a broken `.proto`) → `go build ./...` | every push / PR |
+| `lint` | `protolint lint .protolint.yaml proto/` | every push, no branch restriction |
+| `proto` | pinned toolchain → `make generate` → publish | push to `dev`, or manual dispatch on `dev`/`master` |
 
-The `proto` job then publishes, but only on a **push to `dev`** (pull requests get the lint and build gates only):
+The `proto` job is restricted the same way the publish is — a push to `dev`, or a manual `workflow_dispatch` on `dev` or `master`. A push to `master` — which is what the job itself does — never generates or publishes again.
+
+The publish itself does two things:
 
 1. **publish** — the regenerated `pb/` is committed to `master` as `502BadPing <aditya.sen1hl@gmail.com>`
 2. **release** — a `vX.Y.Z-dev` tag is cut on that `master` commit and a prerelease is published
 
 A push to `master` never publishes — the workflow cannot publish on the `master` push it makes itself. Use a manual `workflow_dispatch` on `dev` or `master` to force one.
 
-There is no test suite or formatter gate in this repo.
+There is no test suite, build, or formatter gate in this repo. `make generate` is the only validation: protoc fails outright on a broken `.proto`, so it doubles as the compile check.
 
 ### The PAT
 

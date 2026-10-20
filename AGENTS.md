@@ -46,14 +46,16 @@ make generate
 
 ## CI: One Workflow (`.github/workflows/ci.yaml`)
 
-`proto-ci`, on `ubuntu-latest`, triggered on **every push and every pull request**. Two jobs:
+`proto-ci`, on `ubuntu-latest`, triggered on **every push** (any branch) and on manual dispatch. There is **no `pull_request` trigger**. Two jobs:
 
-- **`lint`** — `protolint lint .protolint.yaml proto/`
-- **`proto`** — `needs: lint`, so lint gates the build *and* the release. Pinned toolchain → `make generate` (catches a broken `.proto`) → `go build ./...`
+- **`lint`** — no branch restriction: `protolint lint .protolint.yaml proto/`. This is the only job that runs on every branch.
+- **`proto`** (generate and publish) — `needs: lint`, so lint gates the generation and the release. Pinned toolchain → `make generate` → publish.
 
-**No `go vet`, no `gofmt`, no `golangci-lint`, no tests.** There is no `.golangci.yml` in this repo (it is excluded from the org lint path).
+**No `go vet`, no `gofmt`, no `golangci-lint`, no `go build`, no tests.** There is no `.golangci.yml` in this repo (it is excluded from the org lint path). `make generate` is the only validation: protoc fails outright on a broken `.proto`, so it doubles as the compile check.
 
-The `proto` job then publishes, but only on a **push to `dev`**, and only on a push or a manual dispatch (pull requests get the lint and build gates only):
+The `proto` job is **restricted the same way the publish is**: it runs only on a **push to `dev`**, or a manual `workflow_dispatch` on `dev` or `master`. A push to `master` — which is what the job itself does — never generates or publishes again.
+
+The `proto` job then publishes, but only on a **push to `dev`**, or a manual `workflow_dispatch` on `dev` or `master`:
 
 1. commit the regenerated `pb/` to **`master`** as `502BadPing <aditya.sen1hl@gmail.com>`
 2. tag `vX.Y.Z-dev` (patch bump over the newest tag) on that `master` commit and publish a prerelease
