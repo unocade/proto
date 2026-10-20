@@ -50,6 +50,16 @@ jobs:
       (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'))
     runs-on: ubuntu-latest
 
+    # The runner image has no git identity: the `runner` user's GECOS entry is
+    # empty, so `git commit-tree` and `git tag -a` fail with
+    # "empty ident name ... not allowed" unless an identity is supplied.
+    # These cover every git command in this job, including the tag.
+    env:
+      GIT_AUTHOR_NAME: '502BadPing'
+      GIT_AUTHOR_EMAIL: 'aditya.sen1hl@gmail.com'
+      GIT_COMMITTER_NAME: '502BadPing'
+      GIT_COMMITTER_EMAIL: 'aditya.sen1hl@gmail.com'
+
     steps:
       - uses: actions/checkout@v6
 
@@ -106,6 +116,11 @@ jobs:
         env:
           PAT: ${{ secrets.ACCESS_TOKEN }}
         run: |
+          # Also set the identity in the repo config, so any git command run
+          # outside this step (or by a tool) sees it too.
+          git config user.name '502BadPing'
+          git config user.email 'aditya.sen1hl@gmail.com'
+
           # Tree to publish: this checkout's tree with the regenerated pb/
           # that the step above produced. pb/ is gitignored, so it has to be
           # force-added.
