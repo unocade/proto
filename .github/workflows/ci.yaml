@@ -1,7 +1,6 @@
 name: proto-ci
 on:
   push:
-  pull_request:
   workflow_dispatch:
 
 # Default to read-only. The publish steps authenticate with a PAT
