@@ -3,10 +3,9 @@ on:
   push:
   workflow_dispatch:
 
-# Default to read-only. The publish steps authenticate with a PAT
-# (secrets.ACCESS_TOKEN), so no workflow token write scope is needed.
+# The publish job pushes to master and creates tags with the workflow token.
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -113,8 +112,6 @@ jobs:
       # ---------------------------------------------------------------------
       - name: Publish generated code
         id: publish
-        env:
-          PAT: ${{ secrets.ACCESS_TOKEN }}
         run: |
           # Also set the identity in the repo config, so any git command run
           # outside this step (or by a tool) sees it too.
@@ -145,17 +142,15 @@ jobs:
           # fast-forward. No checkout, no force push.
           COMMIT=$(git commit-tree "$TREE" -p "$PARENT" -m 'chore(pb): regenerate protobuf bindings')
           echo "Publishing $COMMIT to master"
-          # Authenticate with the PAT instead of the workflow token, so the
-          # push is attributed to the PAT owner and triggers CI.
-          git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$PAT" | base64 -w0)" \
-            push origin "$COMMIT:refs/heads/master"
+          # The push uses the workflow token that checkout persisted.
+          git push origin "$COMMIT:refs/heads/master"
           echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Tag and publish release
         if: steps.publish.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMIT: ${{ steps.publish.outputs.commit }}
         run: |
           git fetch --tags --force
@@ -174,8 +169,7 @@ jobs:
             echo "Tag $version already exists - reusing it"
           else
             git tag -a "$version" "$COMMIT" -m "Release $version"
-            git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" \
-              push origin "refs/tags/$version"
+            git push origin "refs/tags/$version"
           fi
           if gh release view "$version" > /dev/null 2>&1; then
             echo "Release $version already exists - nothing to publish"

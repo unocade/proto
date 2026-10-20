@@ -150,15 +150,18 @@ A push to `master` never publishes — the workflow cannot publish on the `maste
 
 There is no test suite, build, or formatter gate in this repo. `make generate` is the only validation: protoc fails outright on a broken `.proto`, so it doubles as the compile check.
 
-### The PAT
+### The token
 
-The push and the release authenticate with `secrets.ACCESS_TOKEN` — a **personal access token**, not the default `GITHUB_TOKEN`. It needs write access to this repo (`repo` scope, or fine-grained "Contents: read and write"). The workflow's own token stays read-only (`permissions: contents: read`).
+The publish uses the workflow's own **`GITHUB_TOKEN`** with `permissions: contents: write` — no PAT is needed. The *commit author* is `502BadPing <aditya.sen1hl@gmail.com>`, set through the job's `GIT_AUTHOR_*`/`GIT_COMMITTER_*` env vars, because the runner image ships no git identity and `git commit-tree` / `git tag -a` fail with "empty ident name ... not allowed" without one.
 
-Using a PAT rather than `GITHUB_TOKEN` means the push is attributed to the PAT owner on GitHub, and — unlike a `GITHUB_TOKEN` push — **it triggers CI again**. The re-run finds `master` already up to date, so it publishes nothing. There is no loop.
+Two consequences:
+
+- **The push is attributed to `github-actions[bot]`,** while the commit itself is authored by `502BadPing`. On the commit page you get "authored by 502BadPing" and "pushed by github-actions[bot]".
+- **The auto-commit does not re-trigger the workflow.** GitHub ignores workflow runs caused by pushes made with `GITHUB_TOKEN`, so the generated commit does not start another run. That is what keeps the pipeline from looping.
 
 ### Things worth knowing
 
-- **`master` must allow the PAT to push.** If the branch is protected against it, the publish step fails.
+- **`master` must allow the workflow token to push.** If the branch is protected against it, the publish step fails.
 - **A release only happens when the generated output actually changed.** `pb/` is regenerated on every `dev` push, but it only commits and tags if the result differs. A comment-only proto change does not alter the descriptor, so there is no commit and no release.
 - **The publish is a fast-forward.** The new `master` commit is built with its parent set to `master`'s tip, so no force push and no history rewrite.
 
